@@ -5,10 +5,9 @@ import { getOAuth2Client } from "./auth";
 const TIMEZONE = "Africa/Johannesburg"; // SAST, fixed UTC+2, no DST
 const WORK_START_HOUR = 9;
 const WORK_END_HOUR = 17;
-const SLOT_DURATION_MINUTES = 30;
 const BUFFER_MINUTES = 15;
-const SLOT_STEP_MINUTES = SLOT_DURATION_MINUTES + BUFFER_MINUTES; // 45
 const DEFAULT_DAYS_AHEAD = 14;
+const DEFAULT_SLOT_DURATION_MINUTES = 30;
 
 function pad(n: number) {
   return String(n).padStart(2, "0");
@@ -54,19 +53,25 @@ function isWeekday(year: number, month: number, day: number) {
 
 type Slot = { start: Date; end: Date };
 
-function generateCandidateSlots(daysAhead: number): Slot[] {
+function normaliseDuration(durationMinutes: number) {
+  return durationMinutes === 15 ? 15 : DEFAULT_SLOT_DURATION_MINUTES;
+}
+
+function generateCandidateSlots(daysAhead: number, durationMinutes: number): Slot[] {
   const now = nowInSAST();
   const slots: Slot[] = [];
+  const duration = normaliseDuration(durationMinutes);
+  const step = duration + BUFFER_MINUTES;
 
   for (let offset = 0; offset <= daysAhead; offset++) {
     const { year, month, day } = addDays(now.year, now.month, now.day, offset);
     if (!isWeekday(year, month, day)) continue;
 
-    for (let minutes = WORK_START_HOUR * 60; minutes + SLOT_DURATION_MINUTES <= WORK_END_HOUR * 60; minutes += SLOT_STEP_MINUTES) {
+    for (let minutes = WORK_START_HOUR * 60; minutes + duration <= WORK_END_HOUR * 60; minutes += step) {
       const hour = Math.floor(minutes / 60);
       const minute = minutes % 60;
       const start = new Date(sastDateTime(year, month, day, hour, minute));
-      const end = new Date(start.getTime() + SLOT_DURATION_MINUTES * 60 * 1000);
+      const end = new Date(start.getTime() + duration * 60 * 1000);
 
       // Skip anything already in the past today.
       if (offset === 0) {
@@ -103,8 +108,11 @@ async function getBusyBlocks(timeMin: Date, timeMax: Date) {
     .map((b) => ({ start: new Date(b.start as string), end: new Date(b.end as string) }));
 }
 
-export async function getAvailableSlots(daysAhead: number = DEFAULT_DAYS_AHEAD) {
-  const candidates = generateCandidateSlots(daysAhead);
+export async function getAvailableSlots(
+  daysAhead: number = DEFAULT_DAYS_AHEAD,
+  durationMinutes: number = DEFAULT_SLOT_DURATION_MINUTES
+) {
+  const candidates = generateCandidateSlots(daysAhead, durationMinutes);
   if (candidates.length === 0) return [];
 
   const timeMin = candidates[0].start;
@@ -116,9 +124,10 @@ export async function getAvailableSlots(daysAhead: number = DEFAULT_DAYS_AHEAD) 
     .map((slot) => slot.start.toISOString());
 }
 
-export async function isSlotStillFree(startISO: string) {
+export async function isSlotStillFree(startISO: string, durationMinutes: number = DEFAULT_SLOT_DURATION_MINUTES) {
+  const duration = normaliseDuration(durationMinutes);
   const start = new Date(startISO);
-  const end = new Date(start.getTime() + SLOT_DURATION_MINUTES * 60 * 1000);
+  const end = new Date(start.getTime() + duration * 60 * 1000);
   const busy = await getBusyBlocks(start, end);
   return !busy.some((b) => overlaps(start, end, b.start, b.end));
 }
@@ -128,19 +137,28 @@ export async function createBookingEvent({
   name,
   email,
   company,
+  storeUrl,
+  instagram,
+  routeLabel,
+  durationMinutes,
 }: {
   slot: string;
   name: string;
   email: string;
   company?: string;
+  storeUrl?: string;
+  instagram?: string;
+  routeLabel: string;
+  durationMinutes: number;
 }) {
-  const free = await isSlotStillFree(slot);
+  const duration = normaliseDuration(durationMinutes);
+  const free = await isSlotStillFree(slot, duration);
   if (!free) {
     return { success: false as const, reason: "slot_taken" as const };
   }
 
   const start = new Date(slot);
-  const end = new Date(start.getTime() + SLOT_DURATION_MINUTES * 60 * 1000);
+  const end = new Date(start.getTime() + duration * 60 * 1000);
 
   const auth = getOAuth2Client();
   const calendar = google.calendar({ version: "v3", auth });
@@ -149,8 +167,8 @@ export async function createBookingEvent({
     calendarId: "primary",
     sendUpdates: "all",
     requestBody: {
-      summary: `DB Growth Solutions call: ${name}${company ? ` (${company})` : ""}`,
-      description: `Fit assessment call booked via the website.\n\nName: ${name}\nEmail: ${email}${company ? `\nCompany: ${company}` : ""}`,
+      summary: `DBGS ${duration}-min ${routeLabel}: ${name}${company ? ` (${company})` : ""}`,
+      description: `Fit assessment call booked via the website.\n\nType: ${routeLabel}\nDuration: ${duration} minutes\nName: ${name}\nEmail: ${email}${company ? `\nCompany: ${company}` : ""}${storeUrl ? `\nStore: ${storeUrl}` : ""}${instagram ? `\nInstagram: ${instagram}` : ""}`,
       start: { dateTime: start.toISOString(), timeZone: TIMEZONE },
       end: { dateTime: end.toISOString(), timeZone: TIMEZONE },
       attendees: [{ email, displayName: name }],

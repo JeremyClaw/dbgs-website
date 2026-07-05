@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { evaluate } from "@/components/survey/gate";
+import { getAnswerLabel, getQuestionLabel } from "@/components/survey/questions";
 import { sendNotification } from "@/lib/google/gmail";
 
 export async function POST(request: Request) {
@@ -11,7 +12,7 @@ export async function POST(request: Request) {
   }
 
   // Re-run the gate server-side. Never trust the client's pass/fail for routing.
-  const { pass, reason } = evaluate(answers);
+  const { pass, reason, routeLabel, callDurationMinutes } = evaluate(answers);
 
   console.log("[lead]", {
     name: contact.name,
@@ -19,20 +20,22 @@ export async function POST(request: Request) {
     company: contact.company,
     pass,
     reason,
+    routeLabel,
+    callDurationMinutes,
     clientReason,
     answers,
   });
 
-  const summary = `New fit assessment submission\n\nName: ${contact.name}\nEmail: ${contact.email}\nCompany: ${contact.company || "(not given)"}\n\nResult: ${pass ? "PASS" : "DECLINE"} (${reason})\n\nAnswers:\n${Object.entries(
+  const summary = `New fit assessment submission\n\nName: ${contact.name}\nEmail: ${contact.email}\nCompany: ${contact.company || "(not given)"}\nStore: ${contact.storeUrl || "(not given)"}\nInstagram: ${contact.instagram || "(not given)"}\n\nRoute: ${routeLabel}\nDuration: ${callDurationMinutes} minutes\nResult: BOOKING SHOWN (${reason})\n\nAnswers:\n${Object.entries(
     answers
   )
-    .map(([k, v]) => `- ${k}: ${v}`)
+    .map(([k, v]) => `- ${getQuestionLabel(k)}: ${getAnswerLabel(k, String(v))}`)
     .join("\n")}`;
 
   try {
     await sendNotification({
       to: process.env.OPS_EMAIL as string,
-      subject: `Fit assessment (${pass ? "PASS" : "decline"}): ${contact.name}`,
+      subject: `Fit assessment (${routeLabel}): ${contact.name}`,
       body: summary,
     });
 

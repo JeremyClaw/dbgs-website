@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ContactDetails } from "./questions";
+import type { Answers, ContactDetails } from "./questions";
+import type { GateResult } from "./gate";
 import { copy } from "@/lib/copy";
 
 const TIMEZONE = "Africa/Johannesburg";
@@ -34,7 +35,15 @@ function groupByDay(slots: string[]) {
   return Array.from(groups.entries());
 }
 
-export function BookingReveal({ contact }: { contact: ContactDetails }) {
+export function BookingReveal({
+  contact,
+  answers,
+  result,
+}: {
+  contact: ContactDetails;
+  answers: Answers;
+  result: GateResult;
+}) {
   const [slots, setSlots] = useState<string[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [booking, setBooking] = useState(false);
@@ -42,7 +51,7 @@ export function BookingReveal({ contact }: { contact: ContactDetails }) {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/availability")
+    fetch(`/api/availability?duration=${result.callDurationMinutes}`)
       .then((r) => r.json())
       .then((data) => {
         if (!cancelled) setSlots(data.slots ?? []);
@@ -53,7 +62,7 @@ export function BookingReveal({ contact }: { contact: ContactDetails }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [result.callDurationMinutes]);
 
   async function pickSlot(slot: string) {
     setBooking(true);
@@ -62,7 +71,7 @@ export function BookingReveal({ contact }: { contact: ContactDetails }) {
       const res = await fetch("/api/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slot, ...contact }),
+        body: JSON.stringify({ slot, contact, answers, route: result.route }),
       });
       const data = await res.json();
 
@@ -88,14 +97,22 @@ export function BookingReveal({ contact }: { contact: ContactDetails }) {
     return (
       <div className="max-w-[560px] mx-auto bg-white text-[var(--ink)] rounded-2xl overflow-hidden shadow-2xl p-8 text-center">
         <h3 className="display text-3xl mb-3">{copy.booking.confirmedHeadline}</h3>
-        <p className="text-gray-600">{copy.booking.confirmedBody}</p>
+        <p className="text-gray-600">
+          {copy.booking.confirmedBody.replace("{duration}", String(result.callDurationMinutes))}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="max-w-[560px] mx-auto bg-white text-[var(--ink)] rounded-2xl overflow-hidden shadow-2xl p-7">
-      <h3 className="text-xl font-bold mb-5">{copy.booking.pickATime}</h3>
+      <p className="text-[11px] font-bold uppercase tracking-widest text-[#1fb8a0] mb-2">
+        {result.routeLabel}
+      </p>
+      <h3 className="text-xl font-bold mb-2">{copy.booking.pickATime}</h3>
+      <p className="text-sm text-gray-500 mb-5">
+        {copy.booking.durationNote.replace("{duration}", String(result.callDurationMinutes))}
+      </p>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 

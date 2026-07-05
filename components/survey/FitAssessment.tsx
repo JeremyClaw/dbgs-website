@@ -4,14 +4,20 @@ import { useState } from "react";
 import { questions, type Answers, type ContactDetails } from "./questions";
 import { evaluate, type GateResult } from "./gate";
 import { BookingReveal } from "./BookingReveal";
-import { DeclineState } from "./DeclineState";
 
 const TOTAL_STEPS = questions.length + 1; // + contact step
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function FitAssessment() {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const [contact, setContact] = useState<ContactDetails>({ name: "", email: "", company: "" });
+  const [contact, setContact] = useState<ContactDetails>({
+    name: "",
+    email: "",
+    company: "",
+    storeUrl: "",
+    instagram: "",
+  });
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<GateResult | null>(null);
 
@@ -49,16 +55,15 @@ export function FitAssessment() {
   }
 
   if (result) {
-    return result.pass ? (
-      <BookingReveal contact={contact} />
-    ) : (
-      <DeclineState contact={contact} />
-    );
+    return <BookingReveal contact={contact} answers={answers} result={result} />;
   }
 
   const currentQuestion = !isContactStep ? questions[stepIndex] : null;
   const canProceed = isContactStep
-    ? contact.name.trim() !== "" && contact.email.trim() !== ""
+    ? contact.name.trim() !== "" &&
+      EMAIL_PATTERN.test(contact.email.trim()) &&
+      contact.storeUrl.trim() !== "" &&
+      contact.instagram.trim() !== ""
     : Boolean(currentQuestion && answers[currentQuestion.id]);
 
   return (
@@ -106,7 +111,7 @@ export function FitAssessment() {
           <>
             <h3 className="text-xl font-bold mb-1">Last thing, who should we send this to?</h3>
             <p className="text-sm text-gray-500 mb-5">
-              We will not add you to a newsletter. This is just so we know who is booking.
+              Drop the basics so we can look at the business before the call.
             </p>
             <div className="space-y-3 mb-8">
               <input
@@ -120,6 +125,7 @@ export function FitAssessment() {
                 type="email"
                 placeholder="you@business.com"
                 value={contact.email}
+                required
                 onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))}
                 className="w-full border border-gray-200 rounded-xl px-5 py-4 text-sm"
               />
@@ -128,6 +134,22 @@ export function FitAssessment() {
                 placeholder="Company (optional)"
                 value={contact.company}
                 onChange={(e) => setContact((c) => ({ ...c, company: e.target.value }))}
+                className="w-full border border-gray-200 rounded-xl px-5 py-4 text-sm"
+              />
+              <input
+                type="url"
+                placeholder="Store URL"
+                value={contact.storeUrl}
+                required
+                onChange={(e) => setContact((c) => ({ ...c, storeUrl: e.target.value }))}
+                className="w-full border border-gray-200 rounded-xl px-5 py-4 text-sm"
+              />
+              <input
+                type="text"
+                placeholder="Instagram handle"
+                value={contact.instagram}
+                required
+                onChange={(e) => setContact((c) => ({ ...c, instagram: e.target.value }))}
                 className="w-full border border-gray-200 rounded-xl px-5 py-4 text-sm"
               />
             </div>

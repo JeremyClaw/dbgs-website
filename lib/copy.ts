@@ -1,7 +1,7 @@
 export const copy = {
   nav: {
     brand: ["DB GROWTH", "SOLUTIONS"],
-    cta: "Check Your Fit",
+    cta: "See If We're A Fit",
   },
 
   hero: {
@@ -19,9 +19,9 @@ export const copy = {
       "Straight answers on what's working, what isn't",
       "We say so if it's not a fit, before you pay us",
     ],
-    ctaPrimary: "Check Your Fit →",
+    ctaPrimary: "See If We're A Fit →",
     ctaSecondary: "See How We Work ↓",
-    riskReversal: "Two minutes. No hard sell. If it's not a fit, we'll say so.",
+    riskReversal: "A proper fit check. No hard sell. If there is a better first step, we will say so.",
   },
 
   logoStrip: {
@@ -78,7 +78,7 @@ export const copy = {
       { label: "Support", values: ["Direct line to the person doing the work", "None, you're on your own", "Ticket queue, account manager relay"] },
       { label: "Flexibility", values: ["Change direction same day", "Whenever you find time", "Locked into quarterly contracts"] },
       { label: "Typical cost", values: ["Scoped to your fit assessment", "Free, but costs your time and mistakes", "Often R30k+/month regardless of results"] },
-      { label: "Price", values: ["Check your fit", "Your own time", "Fixed retainer"] },
+      { label: "Price", values: ["See if we're a fit", "Your own time", "Fixed retainer"] },
     ],
   },
 
@@ -163,7 +163,7 @@ export const copy = {
     headline: "WE DON'T TAKE",
     headlineAccent: "EVERYONE.",
     subhead:
-      "Five quick questions, two minutes. If it's a fit, you'll pick a time on the spot. If it's not, we'll tell you straight, no hard sell.",
+      "Answer a few focused questions so we can point you to the right next step: growth management, audit/setup, or a quick fit call. If it is not the right time, we will say that too.",
   },
 
   booking: {
@@ -171,17 +171,9 @@ export const copy = {
     noSlots: "No open slots in the next couple of weeks. Leave your email and we'll follow up directly.",
     slotTaken: "That slot was just taken. Pick another time below.",
     confirmedHeadline: "You're booked.",
-    confirmedBody: "A calendar invite is on its way to your inbox. Talk soon.",
+    confirmedBody: "A {duration}-minute calendar invite is on its way to your inbox. Talk soon.",
     pickATime: "Pick a time that works",
-  },
-
-  decline: {
-    headline: "Not quite a fit right now.",
-    body: "Based on your answers, this isn't the right stage for a full engagement yet. That's honest, not a brush-off.",
-    offer: "Leave your email and we'll follow up when it makes sense, or if we run a lower-commitment offer that fits better.",
-    emailPlaceholder: "you@business.com",
-    submit: "Stay in the loop",
-    submitted: "Got it. We'll be in touch if the timing lines up.",
+    durationNote: "This route gets a {duration}-minute call based on your answers.",
   },
 
   footer: {

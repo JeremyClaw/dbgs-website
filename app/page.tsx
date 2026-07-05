@@ -1,10 +1,13 @@
 import { Hero } from "@/components/sections/Hero";
 import { LogoStrip } from "@/components/sections/LogoStrip";
-import { Testimonials } from "@/components/sections/Testimonials";
+import { TrustStat } from "@/components/sections/TrustStat";
+import { ProvenBrands } from "@/components/sections/ProvenBrands";
 import { Problem } from "@/components/sections/Problem";
 import { Solution } from "@/components/sections/Solution";
+import { FounderCredibility } from "@/components/sections/FounderCredibility";
 import { Services } from "@/components/sections/Services";
 import { Process } from "@/components/sections/Process";
+import { ComparisonTable } from "@/components/sections/ComparisonTable";
 import { CTA } from "@/components/sections/CTA";
 import { Footer } from "@/components/sections/Footer";
 import { copy } from "@/lib/copy";
@@ -28,11 +31,14 @@ export default function Home() {
 
       <Hero />
       <LogoStrip />
-      <Testimonials />
+      <TrustStat />
+      <ProvenBrands />
       <Problem />
       <Solution />
+      <FounderCredibility />
       <Services />
       <Process />
+      <ComparisonTable />
       <CTA />
       <Footer />
     </>

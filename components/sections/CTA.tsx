@@ -18,8 +18,6 @@ export function CTA() {
       </div>
 
       <FitAssessment />
-
-      <p className="text-center text-[11px] text-gray-600 mt-6">{cta.previewNote}</p>
     </Section>
   );
 }

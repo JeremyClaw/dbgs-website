@@ -26,8 +26,6 @@ export const copy = {
 
   logoStrip: {
     label: "Brands We've Worked With",
-    caption:
-      "Real logo files for So'Shell, Pina Jewels, Symbols on Silk, In Sync, First Light Couriers and Sudor Apps. Gloei still a recreated text wordmark, pending a logo file.",
     brands: [
       { name: "So'Shell", url: "https://so-shell.com", logo: "/client-logos/so-shell.png" },
       { name: "Pina Jewels", url: "https://pinajewel.com/", logo: "/client-logos/pina-jewels.png" },
@@ -39,32 +37,62 @@ export const copy = {
     ],
   },
 
-  testimonials: {
-    caption:
-      "Logos and links are real. Quotes are placeholders. Collect a signed-off testimonial from each client before this goes live.",
-    items: [
-      {
-        quote:
-          '[Placeholder: real quote pending] "Working with DB Growth Solutions changed how we think about our ad account. We finally understood what was actually driving sales."',
-        brand: "Gloei",
-        url: "http://gloei.beauty/",
-        style: "sans" as const,
-      },
-      {
-        quote:
-          '[Placeholder: real quote pending] "No fluff, no jargon. Just clear reporting and a straight answer every time we asked a hard question."',
-        brand: "Pina Jewels",
-        url: "https://pinajewel.com/",
-        style: "script" as const,
-      },
-      {
-        quote:
-          '[Placeholder: real quote pending] "They told us what wasn\'t working before we wasted more budget on it. That alone was worth it."',
-        brand: "First Light Couriers",
-        url: "https://www.firstlightcouriers.com/",
-        style: "logo" as const,
-        logo: "/client-logos/first-light-couriers.png",
-      },
+  trustStat: {
+    eyebrow: "WHY META ADS WORK",
+    headline: ["YOUR CUSTOMERS STOPPED", "LOOKING AT BILLBOARDS."],
+    headlineAccent: "THEIR PHONE IS THE BILLBOARD NOW.",
+    body: "Meta isn't a social media company. It's the biggest advertising platform on earth. Advertising made up 97% of Meta's total revenue in Q4 2025, not subscriptions, not hardware. Over 10 million businesses already advertise across Facebook and Instagram. The question isn't whether your customers are there. It's whether you're showing up.",
+    stats: [
+      { value: "97%", label: "Of Meta's Q4 2025 revenue was advertising" },
+      { value: "10M+", label: "Active advertisers on Meta's platforms" },
+    ],
+    citation: "Source: Meta Platforms Q4 2025 SEC filing (10-K); Meta advertiser disclosures.",
+    platformsLabel: "Platforms we manage campaigns on",
+    platforms: [
+      { name: "Meta Ads", logo: "/platform-logos/meta.webp" },
+      { name: "Google Ads", logo: "/platform-logos/google-ads.svg" },
+    ],
+  },
+
+  provenBrands: {
+    eyebrow: "PROOF THE CHANNEL WORKS",
+    headline: ["BRANDS THE WHOLE WORLD KNOWS"],
+    headlineAccent: "SCALED ON META ADS.",
+    brands: [
+      { name: "Gymshark", style: "text-bold" },
+      { name: "SKIMS", logo: "/platform-logos/skims.svg" },
+      { name: "MVMT", logo: "/platform-logos/mvmt.svg" },
+      { name: "Fashion Nova", style: "text-split" },
+    ],
+  },
+
+  comparison: {
+    headline: ["DOING IT YOURSELF OR", "HIRING A BIG AGENCY"],
+    headlineAccent: "COSTS MORE THAN YOU THINK.",
+    columns: ["DB Growth Solutions", "Doing It Yourself", "Big Agency"],
+    rows: [
+      { label: "Time to live campaign", values: ["1-2 weeks", "Months of trial and error", "4-8 weeks onboarding queue"] },
+      { label: "Who runs your account", values: ["The founder, every time", "You, on top of everything else", "Whichever junior is free"] },
+      { label: "Creative testing", values: ["Structured, ongoing", "Whenever you get to it", "Templated, low priority"] },
+      { label: "Reporting", values: ["Straight answers, Meta vs Shopify", "Ad Manager dashboard, no context", "Monthly deck, heavy on vanity metrics"] },
+      { label: "Support", values: ["Direct line to the person doing the work", "None, you're on your own", "Ticket queue, account manager relay"] },
+      { label: "Flexibility", values: ["Change direction same day", "Whenever you find time", "Locked into quarterly contracts"] },
+      { label: "Typical cost", values: ["Scoped to your fit assessment", "Free, but costs your time and mistakes", "Often R30k+/month regardless of results"] },
+      { label: "Price", values: ["Check your fit", "Your own time", "Fixed retainer"] },
+    ],
+  },
+
+  founder: {
+    eyebrow: "WHO YOU'RE WORKING WITH",
+    headline: "ONE OPERATOR.",
+    headlineLine2: "NO ACCOUNT MANAGERS.",
+    headlineAccent: "NO HANDOFFS.",
+    photo: "/founder/deej.png",
+    name: "Deej Burke",
+    title: "Founder, DB Growth Solutions",
+    body: [
+      "10+ years in sales, growth and marketing across ecommerce, SaaS, hospitality, finance, real estate and service businesses. I specialise in direct-response Meta advertising and conversion optimisation: finding the leaks between attention and revenue, then fixing them with sharper ads, better offers and stronger conversion paths built around measurable outcomes, not vanity metrics.",
+      "A sales background means I understand how people actually buy, so I look at the whole journey: creative, offer, landing page, checkout, follow-up, not just the ad account. And you work directly with me. No layers, no handoffs, no junior account manager.",
     ],
   },
 
@@ -136,7 +164,6 @@ export const copy = {
     headlineAccent: "EVERYONE.",
     subhead:
       "Five quick questions, two minutes. If it's a fit, you'll pick a time on the spot. If it's not, we'll tell you straight, no hard sell.",
-    previewNote: "Gate logic and native booking run for real below.",
   },
 
   booking: {

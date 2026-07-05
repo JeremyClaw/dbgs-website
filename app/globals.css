@@ -78,67 +78,11 @@ body {
   margin-top: 2px;
 }
 
-.logo-chip {
-  display: inline-flex;
-  align-items: center;
-  transition: transform 0.2s ease;
-}
-.logo-chip:hover {
-  transform: translateY(-2px);
-}
-.logo-chip img {
-  height: 34px;
-  width: auto;
-  max-width: none;
-  display: block;
-  background: #fff;
-  border-radius: 8px;
-  padding: 8px 16px;
-  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
-}
 .wordmark-gloei {
   font-family: var(--font-body), sans-serif;
   font-weight: 800;
   color: #12151c;
-  font-size: 1.25rem;
-  background: #fff;
-  border-radius: 8px;
-  padding: 8px 16px;
-  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
-  display: inline-block;
-}
-
-.testimonial-card {
-  background: #fff;
-  color: var(--ink);
-  border-radius: 14px;
-  padding: 28px;
-  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.5);
-  position: relative;
-}
-.testimonial-card::before {
-  content: '"';
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  font-family: Georgia, serif;
-  font-size: 64px;
-  color: rgba(37, 99, 235, 0.15);
-  line-height: 1;
-}
-
-.placeholder-tag {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #b45309;
-  background: #fef3c7;
-  border: 1px solid #fde68a;
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-top: 10px;
+  font-size: 1.15rem;
 }
 
 .problem-card {

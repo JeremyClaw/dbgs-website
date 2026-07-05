@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+:root {
+  --dark: #0a0e14;
+  --dark-2: #10151e;
+  --cream: #f7f4ee;
+  --card-pink: #fdece5;
+  --ink: #12151c;
+  --teal: #1fb8a0;
+  --blue: #2563eb;
+  --grad: linear-gradient(135deg, #1fb8a0 0%, #2563eb 100%);
+}
+
+@theme inline {
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-script: var(--font-script);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body), sans-serif;
+  background: var(--dark);
+  color: #e8e9ec;
+}
+
+.display {
+  font-family: var(--font-display), sans-serif;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.font-script {
+  font-family: var(--font-script), serif;
+}
+
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grad-btn {
+  background: var(--grad);
+}
+.grad-btn:hover {
+  filter: brightness(1.1);
+}
+
+.section-cream {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.check-dot {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: rgba(31, 184, 160, 0.15);
+  border: 1px solid rgba(31, 184, 160, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.logo-chip {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+.logo-chip:hover {
+  transform: translateY(-2px);
+}
+.logo-chip img {
+  height: 34px;
+  width: auto;
+  max-width: none;
+  display: block;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+}
+.wordmark-gloei {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 800;
+  color: #12151c;
+  font-size: 1.25rem;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+  display: inline-block;
+}
+
+.testimonial-card {
+  background: #fff;
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-family: Georgia, serif;
+  font-size: 64px;
+  color: rgba(37, 99, 235, 0.15);
+  line-height: 1;
+}
+
+.placeholder-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #b45309;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-top: 10px;
+}
+
+.problem-card {
+  background: var(--card-pink);
+  border-radius: 14px;
+  padding: 24px;
+}
+.thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #f5c7b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.thumb span {
+  display: block;
+  width: 18px;
+  height: 3px;
+  background: #c2410c;
+  border-radius: 2px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8f98;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pill-option {
+  transition: all 0.2s ease;
+}
+.pill-option:hover,
+.pill-option.selected {
+  border-color: var(--teal);
+  background: rgba(31, 184, 160, 0.08);
+  color: var(--ink);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2f3a;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+.marquee-content {
+  display: inline-block;
+  animation: marquee 26s linear infinite;
+}

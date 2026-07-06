@@ -107,7 +107,7 @@ export function BookingReveal({
   return (
     <div className="max-w-[560px] mx-auto bg-white text-[var(--ink)] rounded-2xl overflow-hidden shadow-2xl p-7">
       <p className="text-[11px] font-bold uppercase tracking-widest text-[#1fb8a0] mb-2">
-        {result.routeLabel}
+        {result.externalLabel}
       </p>
       <h3 className="text-xl font-bold mb-2">{copy.booking.pickATime}</h3>
       <p className="text-sm text-gray-500 mb-5">

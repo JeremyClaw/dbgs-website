@@ -139,7 +139,7 @@ export async function createBookingEvent({
   company,
   storeUrl,
   instagram,
-  routeLabel,
+  externalLabel,
   durationMinutes,
 }: {
   slot: string;
@@ -148,7 +148,7 @@ export async function createBookingEvent({
   company?: string;
   storeUrl?: string;
   instagram?: string;
-  routeLabel: string;
+  externalLabel: string;
   durationMinutes: number;
 }) {
   const duration = normaliseDuration(durationMinutes);
@@ -167,8 +167,8 @@ export async function createBookingEvent({
     calendarId: "primary",
     sendUpdates: "all",
     requestBody: {
-      summary: `DBGS ${duration}-min ${routeLabel}: ${name}${company ? ` (${company})` : ""}`,
-      description: `Fit assessment call booked via the website.\n\nType: ${routeLabel}\nDuration: ${duration} minutes\nName: ${name}\nEmail: ${email}${company ? `\nCompany: ${company}` : ""}${storeUrl ? `\nStore: ${storeUrl}` : ""}${instagram ? `\nInstagram: ${instagram}` : ""}`,
+      summary: `${name} - ${externalLabel} with DBGS`,
+      description: `${externalLabel} with DB Growth Solutions.\n\nName: ${name}\nEmail: ${email}${company ? `\nCompany: ${company}` : ""}${storeUrl ? `\nStore: ${storeUrl}` : ""}${instagram ? `\nInstagram: ${instagram}` : ""}`,
       start: { dateTime: start.toISOString(), timeZone: TIMEZONE },
       end: { dateTime: end.toISOString(), timeZone: TIMEZONE },
       attendees: [{ email, displayName: name }],

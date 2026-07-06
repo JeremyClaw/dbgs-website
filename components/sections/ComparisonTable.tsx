@@ -17,7 +17,8 @@ export function ComparisonTable() {
         </h2>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Tablet and up: full side-by-side table */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse">
           <thead>
             <tr>
@@ -67,6 +68,36 @@ export function ComparisonTable() {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile: one stacked card per row instead of side-scrolling a table */}
+      <div className="md:hidden space-y-4">
+        {comparison.rows.map((row) => (
+          <div key={row.label} className="rounded-xl border border-gray-100 overflow-hidden">
+            <div className="px-4 py-3 bg-gray-50 text-sm font-semibold text-[var(--ink)]">
+              {row.label}
+            </div>
+            <div className="divide-y divide-gray-100">
+              {row.values.map((value, i) => (
+                <div
+                  key={i}
+                  className={`flex items-baseline justify-between gap-4 px-4 py-3 text-sm ${
+                    i === 0 ? "bg-[var(--cream)] font-semibold text-[var(--ink)]" : "text-gray-500"
+                  }`}
+                >
+                  <span
+                    className={`text-xs uppercase tracking-widest shrink-0 ${
+                      i === 0 ? "text-[var(--ink)]/70" : "text-gray-400"
+                    }`}
+                  >
+                    {comparison.columns[i]}
+                  </span>
+                  <span className="text-right">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </Section>
   );

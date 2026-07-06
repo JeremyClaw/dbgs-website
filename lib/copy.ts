@@ -163,7 +163,7 @@ export const copy = {
     headline: "WE DON'T TAKE",
     headlineAccent: "EVERYONE.",
     subhead:
-      "Answer a few focused questions so we can point you to the right next step: growth management, audit/setup, or a quick fit call. If it is not the right time, we will say that too.",
+      "Answer a few focused questions so we can point you to the right next step and book a discovery call directly.",
   },
 
   booking: {
@@ -173,7 +173,7 @@ export const copy = {
     confirmedHeadline: "You're booked.",
     confirmedBody: "A {duration}-minute calendar invite is on its way to your inbox. Talk soon.",
     pickATime: "Pick a time that works",
-    durationNote: "This route gets a {duration}-minute call based on your answers.",
+    durationNote: "This is a {duration}-minute call based on your answers.",
   },
 
   footer: {

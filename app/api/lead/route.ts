@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   }
 
   // Re-run the gate server-side. Never trust the client's pass/fail for routing.
-  const { pass, reason, routeLabel, callDurationMinutes } = evaluate(answers);
+  const { pass, reason, routeLabel, leadQualitySummary, callDurationMinutes } = evaluate(answers);
 
   console.log("[lead]", {
     name: contact.name,
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     answers,
   });
 
-  const summary = `New fit assessment submission\n\nName: ${contact.name}\nEmail: ${contact.email}\nCompany: ${contact.company || "(not given)"}\nStore: ${contact.storeUrl || "(not given)"}\nInstagram: ${contact.instagram || "(not given)"}\n\nRoute: ${routeLabel}\nDuration: ${callDurationMinutes} minutes\nResult: BOOKING SHOWN (${reason})\n\nAnswers:\n${Object.entries(
+  const summary = `New fit assessment submission\n\nLead quality: ${leadQualitySummary}\n\nName: ${contact.name}\nEmail: ${contact.email}\nCompany: ${contact.company || "(not given)"}\nStore: ${contact.storeUrl || "(not given)"}\nInstagram: ${contact.instagram || "(not given)"}\n\nRoute: ${routeLabel} (${reason})\nDuration: ${callDurationMinutes} minutes\n\nAnswers:\n${Object.entries(
     answers
   )
     .map(([k, v]) => `- ${getQuestionLabel(k)}: ${getAnswerLabel(k, String(v))}`)

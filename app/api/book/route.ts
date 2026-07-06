@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       company,
       storeUrl: contact.storeUrl,
       instagram: contact.instagram,
-      routeLabel: gate.routeLabel,
+      externalLabel: gate.externalLabel,
       durationMinutes: gate.callDurationMinutes,
     });
   } catch (err) {
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
       body: `Hi ${name},\n\nYou're confirmed for ${when} (South Africa time). A calendar invite is on its way separately.\n\nTalk soon,\nDeej`,
     });
 
-  const opsBody = `Booking confirmed.\n\nType: ${gate.routeLabel}\nDuration: ${gate.callDurationMinutes} minutes\nName: ${name}\nEmail: ${email}\nCompany: ${company || "(not given)"}\nStore: ${contact.storeUrl || "(not given)"}\nInstagram: ${contact.instagram || "(not given)"}\nWhen: ${when}`;
+  const opsBody = `Booking confirmed.\n\nLead quality: ${gate.leadQualitySummary}\n\nType: ${gate.routeLabel}\nDuration: ${gate.callDurationMinutes} minutes\nName: ${name}\nEmail: ${email}\nCompany: ${company || "(not given)"}\nStore: ${contact.storeUrl || "(not given)"}\nInstagram: ${contact.instagram || "(not given)"}\nWhen: ${when}`;
 
     await sendNotification({
       to: process.env.OPS_EMAIL as string,

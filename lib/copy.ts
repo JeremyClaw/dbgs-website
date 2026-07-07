@@ -80,6 +80,18 @@ export const copy = {
       { label: "Typical cost", values: ["Scoped to your fit assessment", "Free, but costs your time and mistakes", "Often R30k+/month regardless of results"] },
       { label: "Price", values: ["See if we're a fit", "Your own time", "Fixed retainer"] },
     ],
+    // Condensed mobile version: same ground covered, short side-by-side
+    // tick/cross cells per row instead of stacked full sentences.
+    mobileColumns: ["Us", "DIY", "Agency"],
+    mobileRows: [
+      { label: "Time to live campaign", verdicts: [{ pass: true, text: "1-2 weeks" }, { pass: false, text: "Months of trial" }, { pass: false, text: "4-8 week queue" }] },
+      { label: "Who runs your account", verdicts: [{ pass: true, text: "The founder" }, { pass: false, text: "You, solo" }, { pass: false, text: "Whichever junior" }] },
+      { label: "Creative testing", verdicts: [{ pass: true, text: "Structured, ongoing" }, { pass: false, text: "Whenever you can" }, { pass: false, text: "Templated, low priority" }] },
+      { label: "Reporting", verdicts: [{ pass: true, text: "Straight answers" }, { pass: false, text: "No context" }, { pass: false, text: "Vanity metrics" }] },
+      { label: "Support", verdicts: [{ pass: true, text: "Direct line" }, { pass: false, text: "On your own" }, { pass: false, text: "Ticket queue" }] },
+      { label: "Flexibility", verdicts: [{ pass: true, text: "Same day" }, { pass: false, text: "If you find time" }, { pass: false, text: "Locked into contracts" }] },
+      { label: "Typical cost", verdicts: [{ pass: true, text: "Scoped to your fit" }, { pass: false, text: "Costs your time" }, { pass: false, text: "Often R30k+/month" }] },
+    ],
   },
 
   founder: {

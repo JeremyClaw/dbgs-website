@@ -53,8 +53,8 @@ export const questions: Question[] = [
   },
   {
     id: "demandSignal",
-    question: "How much demand signal do you already have?",
-    subtext: "Online sales matter, but markets, wholesale, pop-ups and stockists count too.",
+    question: "Are people already buying from you?",
+    subtext: "Online sales count, but markets, wholesale, pop-ups and stockists count too.",
     options: [
       { label: "We are pre-launch or still building the first collection", value: "pre_launch" },
       { label: "Sales are mostly friends, family or occasional DMs", value: "early_signal" },

@@ -7,8 +7,8 @@ export const copy = {
   hero: {
     kicker: "Paid media and creative systems for DTC brands",
     headline: [
-      "THE PAID MEDIA SYSTEM",
-      "FOR DTC BRANDS",
+      "THE ADVERTISING SYSTEM",
+      "FOR BRANDS",
     ],
     headlineAccent: "SCALE.",
     subhead:
@@ -103,7 +103,7 @@ export const copy = {
     name: "Deej Burke",
     title: "Founder, DB Growth Solutions",
     body: [
-      "10+ years in sales, growth and marketing across ecommerce, SaaS, hospitality, finance, real estate and service businesses. I specialise in direct-response Meta advertising and conversion optimisation: finding the leaks between attention and revenue, then fixing them with sharper ads, better offers and stronger conversion paths built around measurable outcomes, not vanity metrics.",
+      "10+ years in sales, growth and marketing across ecommerce, SaaS, hospitality, finance, real estate and service businesses. I run Meta ads that are built to sell, not just to look good. I find where people click but don't buy, then fix it with sharper ads, better offers and a smoother path to checkout. I care about sales, not likes.",
       "A sales background means I understand how people actually buy, so I look at the whole journey: creative, offer, landing page, checkout, follow-up, not just the ad account. And you work directly with me. No layers, no handoffs, no junior account manager.",
     ],
   },

@@ -74,11 +74,11 @@ export const copy = {
       { label: "Time to live campaign", values: ["1-2 weeks", "Months of trial and error", "4-8 weeks onboarding queue"] },
       { label: "Who runs your account", values: ["The founder, every time", "You, on top of everything else", "Whichever junior is free"] },
       { label: "Creative testing", values: ["Structured, ongoing", "Whenever you get to it", "Templated, low priority"] },
-      { label: "Reporting", values: ["Straight answers, Meta vs Shopify", "Ad Manager dashboard, no context", "Monthly deck, heavy on vanity metrics"] },
+      { label: "Reporting", values: ["Straight answers, Meta vs Shopify", "Ad Manager dashboard, no context", "Monthly deck, full of numbers that don't matter"] },
       { label: "Support", values: ["Direct line to the person doing the work", "None, you're on your own", "Ticket queue, account manager relay"] },
       { label: "Flexibility", values: ["Change direction same day", "Whenever you find time", "Locked into quarterly contracts"] },
-      { label: "Typical cost", values: ["Scoped to your fit assessment", "Free, but costs your time and mistakes", "Often R30k+/month regardless of results"] },
-      { label: "Price", values: ["See if we're a fit", "Your own time", "Fixed retainer"] },
+      { label: "Typical cost", values: ["Matched to your fit check", "Free, but costs your time and mistakes", "Often R30k+/month regardless of results"] },
+      { label: "Price", values: ["See if we're a fit", "Your own time", "Fixed monthly fee"] },
     ],
     // Condensed mobile version: same ground covered, short side-by-side
     // tick/cross cells per row instead of stacked full sentences.
@@ -87,10 +87,10 @@ export const copy = {
       { label: "Time to live campaign", verdicts: [{ pass: true, text: "1-2 weeks" }, { pass: false, text: "Months of trial" }, { pass: false, text: "4-8 week queue" }] },
       { label: "Who runs your account", verdicts: [{ pass: true, text: "The founder" }, { pass: false, text: "You, solo" }, { pass: false, text: "Whichever junior" }] },
       { label: "Creative testing", verdicts: [{ pass: true, text: "Structured, ongoing" }, { pass: false, text: "Whenever you can" }, { pass: false, text: "Templated, low priority" }] },
-      { label: "Reporting", verdicts: [{ pass: true, text: "Straight answers" }, { pass: false, text: "No context" }, { pass: false, text: "Vanity metrics" }] },
+      { label: "Reporting", verdicts: [{ pass: true, text: "Straight answers" }, { pass: false, text: "No context" }, { pass: false, text: "Meaningless numbers" }] },
       { label: "Support", verdicts: [{ pass: true, text: "Direct line" }, { pass: false, text: "On your own" }, { pass: false, text: "Ticket queue" }] },
       { label: "Flexibility", verdicts: [{ pass: true, text: "Same day" }, { pass: false, text: "If you find time" }, { pass: false, text: "Locked into contracts" }] },
-      { label: "Typical cost", verdicts: [{ pass: true, text: "Scoped to your fit" }, { pass: false, text: "Costs your time" }, { pass: false, text: "Often R30k+/month" }] },
+      { label: "Typical cost", verdicts: [{ pass: true, text: "Matched to your fit" }, { pass: false, text: "Costs your time" }, { pass: false, text: "Often R30k+/month" }] },
     ],
   },
 
@@ -133,14 +133,14 @@ export const copy = {
     headline: "DIAGNOSE FIRST. BUILD SECOND.",
     headlineLine2: "SCALE WHAT'S",
     headlineAccent: "PROVEN.",
-    body: "One operator runs your account end to end: creative, tracking, funnel and reporting. No layers, no guessing, no vanity metrics. Just a clear read on what's working and a plan for what's next.",
+    body: "One operator runs your account end to end: creative, tracking, funnel and reporting. No layers, no guessing, no numbers that don't matter. Just a clear read on what's working and a plan for what's next.",
   },
 
   services: [
     {
       index: "01",
       title: "Meta Ads Management",
-      description: "Campaign setup, scaling, Advantage+, retargeting and creative testing, run daily.",
+      description: "Campaign setup, scaling, retargeting and creative testing, run daily.",
     },
     {
       index: "02",
@@ -149,7 +149,7 @@ export const copy = {
     },
     {
       index: "03",
-      title: "CRO & Funnel Diagnostics",
+      title: "Store & Checkout Fixes",
       description: "Product page review, checkout friction and landing page fixes before we spend on ads.",
     },
     {

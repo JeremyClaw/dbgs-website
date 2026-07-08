@@ -1,4 +1,5 @@
 import { Section } from "@/components/ui/Section";
+import { InlineCTA } from "@/components/ui/InlineCTA";
 import { copy } from "@/lib/copy";
 
 export function ComparisonTable() {
@@ -108,6 +109,7 @@ export function ComparisonTable() {
           </div>
         ))}
       </div>
+      <InlineCTA text="Ready to stop doing it the hard way?" />
     </Section>
   );
 }

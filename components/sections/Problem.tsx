@@ -1,4 +1,5 @@
 import { Section } from "@/components/ui/Section";
+import { InlineCTA } from "@/components/ui/InlineCTA";
 import { copy } from "@/lib/copy";
 
 export function Problem() {
@@ -30,6 +31,7 @@ export function Problem() {
           </div>
         ))}
       </div>
+      <InlineCTA text="Sound familiar?" />
     </Section>
   );
 }

@@ -10,7 +10,7 @@ export const questions: Question[] = [
   {
     id: "category",
     question: "What type of brand are you building?",
-    subtext: "This helps us understand whether the growth angle is more brand-led, visual, or direct-response.",
+    subtext: "This helps us tailor the strategy to your kind of product.",
     options: [
       { label: "Jewellery", value: "jewellery" },
       { label: "Clothing / apparel", value: "apparel" },
@@ -82,7 +82,7 @@ export const questions: Question[] = [
     question: "What kind of help are you looking for?",
     options: [
       { label: "Someone to manage and improve paid media", value: "management" },
-      { label: "A paid audit, CRO review or setup sprint", value: "audit_setup" },
+      { label: "A paid audit, website fixes, or setup project", value: "audit_setup" },
       { label: "A quick expert opinion before I decide", value: "quick_opinion" },
       { label: "I am mainly gathering ideas for now", value: "free_advice" },
     ],

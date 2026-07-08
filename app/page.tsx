@@ -31,9 +31,9 @@ export default function Home() {
 
       <Hero />
       <LogoStrip />
+      <Problem />
       <TrustStat />
       <ProvenBrands />
-      <Problem />
       <Solution />
       <FounderCredibility />
       <Services />

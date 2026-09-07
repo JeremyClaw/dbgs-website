@@ -18,6 +18,23 @@ export function CTA() {
       </div>
 
       <FitAssessment />
+
+      {/* Low-commitment path. See the note on cta.fallbackLabel in lib/copy.ts
+          for why this is an email and not a booking link. */}
+      <div className="max-w-[560px] mx-auto mt-10 pt-8 border-t border-white/10 text-center">
+        <p className="text-sm text-gray-400">
+          {cta.fallbackLabel}{" "}
+          <span className="text-gray-500">{cta.fallbackBody}</span>
+        </p>
+        {/* py-3 keeps this above the 44px touch-target floor. As a bare inline
+            link it rendered 20px high, which is a miss on a phone. */}
+        <a
+          href={`mailto:${copy.footer.email}?subject=DBGS%20enquiry`}
+          className="inline-flex items-center justify-center mt-2 px-4 py-3 text-sm font-bold text-white underline decoration-white/30 underline-offset-4 hover:decoration-white transition-colors"
+        >
+          {copy.footer.email}
+        </a>
+      </div>
     </Section>
   );
 }

@@ -7,8 +7,14 @@
   --card-pink: #fdece5;
   --ink: #12151c;
   --teal: #1fb8a0;
+  --teal-on-white: #0f8071;
   --blue: #2563eb;
+  /* Decorative gradient: headline text, accents. Never carries white text. */
   --grad: linear-gradient(135deg, #1fb8a0 0%, #2563eb 100%);
+  /* Interactive gradient: buttons only. The teal stop is darkened because white
+     14px bold on #1fb8a0 measures 2.49:1, well under the 4.5:1 floor. At
+     #0f8071 the worst point across the whole sweep is 4.83:1. */
+  --grad-btn: linear-gradient(135deg, #0f8071 0%, #2563eb 100%);
 }
 
 @theme inline {
@@ -57,10 +63,23 @@ body {
 }
 
 .grad-btn {
-  background: var(--grad);
+  background: var(--grad-btn);
 }
+/* Lift instead of brightening. brightness(1.1) lightened the teal stop back to
+   4.10:1 and reverted the contrast fix on the exact state a user is in when
+   they are about to click. */
 .grad-btn:hover {
-  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(15, 128, 113, 0.35);
+}
+.grad-btn:active {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .grad-btn:hover,
+  .grad-btn:active {
+    transform: none;
+  }
 }
 
 .section-cream {

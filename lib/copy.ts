@@ -37,11 +37,14 @@ export const copy = {
     ],
   },
 
+  // Compressed Sep 2026. This used to be a full section arguing that Meta ads
+  // work, followed by a second section of borrowed logos (Gymshark, SKIMS).
+  // Someone on a page titled "Paid Media for DTC Brands" already believes the
+  // channel works, and the borrowed logos invited a comparison against our own
+  // client strip that we lose. The cited stats survive as a slim band; the
+  // argument does not.
   trustStat: {
-    eyebrow: "WHY META ADS WORK",
-    headline: ["YOUR CUSTOMERS STOPPED", "LOOKING AT BILLBOARDS."],
-    headlineAccent: "THEIR PHONE IS THE BILLBOARD NOW.",
-    body: "Meta isn't a social media company. It's the biggest advertising platform on earth. Advertising made up 97% of Meta's total revenue in Q4 2025, not subscriptions, not hardware. Over 10 million businesses already advertise across Facebook and Instagram. The question isn't whether your customers are there. It's whether you're showing up.",
+    eyebrow: "WHERE WE RUN CAMPAIGNS",
     stats: [
       { value: "97%", label: "Of Meta's Q4 2025 revenue was advertising" },
       { value: "10M+", label: "Active advertisers on Meta's platforms" },
@@ -77,8 +80,7 @@ export const copy = {
       { label: "Reporting", values: ["Straight answers, Meta vs Shopify", "Ad Manager dashboard, no context", "Monthly deck, full of numbers that don't matter"] },
       { label: "Support", values: ["Direct line to the person doing the work", "None, you're on your own", "Ticket queue, account manager relay"] },
       { label: "Flexibility", values: ["Change direction same day", "Whenever you find time", "Locked into quarterly contracts"] },
-      { label: "Typical cost", values: ["Matched to your fit check", "Free, but costs your time and mistakes", "Often R30k+/month regardless of results"] },
-      { label: "Price", values: ["See if we're a fit", "Your own time", "Fixed monthly fee"] },
+      { label: "Typical cost", values: ["Quoted after the audit, never before", "Free, but costs your time and mistakes", "Often R30k+/month regardless of results"] },
     ],
     // Condensed mobile version: same ground covered, short side-by-side
     // tick/cross cells per row instead of stacked full sentences.
@@ -90,7 +92,7 @@ export const copy = {
       { label: "Reporting", verdicts: [{ pass: true, text: "Straight answers" }, { pass: false, text: "No context" }, { pass: false, text: "Meaningless numbers" }] },
       { label: "Support", verdicts: [{ pass: true, text: "Direct line" }, { pass: false, text: "On your own" }, { pass: false, text: "Ticket queue" }] },
       { label: "Flexibility", verdicts: [{ pass: true, text: "Same day" }, { pass: false, text: "If you find time" }, { pass: false, text: "Locked into contracts" }] },
-      { label: "Typical cost", verdicts: [{ pass: true, text: "Matched to your fit" }, { pass: false, text: "Costs your time" }, { pass: false, text: "Often R30k+/month" }] },
+      { label: "Typical cost", verdicts: [{ pass: true, text: "Quoted after the audit" }, { pass: false, text: "Costs your time" }, { pass: false, text: "Often R30k+/month" }] },
     ],
   },
 
@@ -176,6 +178,14 @@ export const copy = {
     headlineAccent: "EVERYONE.",
     subhead:
       "Answer a few focused questions so we can point you to the right next step and book a discovery call directly.",
+    // Added Sep 2026. The 13-step fit check was the only way to convert, so a
+    // visitor who was interested but not ready to commit had nowhere to go.
+    // This is deliberately an email rather than a booking bypass: skipping
+    // straight to the calendar would fill it with the bad fits the fit check
+    // exists to filter out. It also proves the "one operator, no handoffs"
+    // claim the rest of the page makes, rather than just asserting it.
+    fallbackLabel: "Not ready for the full fit check?",
+    fallbackBody: "Email me directly and I'll answer it myself, usually same day.",
   },
 
   booking: {

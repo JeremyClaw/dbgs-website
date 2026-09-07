@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { LogoStrip } from "@/components/sections/LogoStrip";
 import { TrustStat } from "@/components/sections/TrustStat";
-import { ProvenBrands } from "@/components/sections/ProvenBrands";
 import { Problem } from "@/components/sections/Problem";
 import { Solution } from "@/components/sections/Solution";
 import { FounderCredibility } from "@/components/sections/FounderCredibility";
@@ -33,7 +32,10 @@ export default function Home() {
       <LogoStrip />
       <Problem />
       <TrustStat />
-      <ProvenBrands />
+      {/* ProvenBrands (Gymshark, SKIMS, MVMT, Fashion Nova) unmounted Sep 2026.
+          Borrowed logos sat two sections from our own client strip and invited a
+          comparison we lose. Component and copy are still in the repo if we want
+          to reinstate it somewhere it does not compete with our own proof. */}
       <Solution />
       <FounderCredibility />
       <Services />

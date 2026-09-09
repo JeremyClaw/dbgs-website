@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:gate-ai": "node --no-warnings --experimental-strip-types --test components/survey/gate-ai.test.mjs",
+    "test:fluent-booking": "node --no-warnings --experimental-strip-types --test lib/fluent-booking.test.mjs"
   },
   "dependencies": {
     "googleapis": "^173.0.0",

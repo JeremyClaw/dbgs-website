@@ -3,9 +3,29 @@
 import { useEffect, useState } from "react";
 import type { Answers, ContactDetails } from "./questions";
 import type { GateResult } from "./gate";
+import type { FluentAnswers, FluentContactDetails } from "./questions-ai";
+import type { FluentResult, Tier } from "./gate-ai";
 import { copy } from "@/lib/copy";
+import { fluentCopy } from "@/lib/copy-fluent";
+import { FLUENT_INTRO_DURATION_MINUTES } from "@/lib/fluent-booking";
 
 const TIMEZONE = "Africa/Johannesburg";
+
+type DbgsBookingProps = {
+  funnel?: "dbgs";
+  contact: ContactDetails;
+  answers: Answers;
+  result: GateResult;
+};
+
+type FluentBookingProps = {
+  funnel: "fluent";
+  contact: FluentContactDetails;
+  answers: FluentAnswers;
+  result: FluentResult;
+};
+
+type DeliveryFormat = "in_person" | "remote";
 
 function dayLabel(iso: string) {
   return new Date(iso).toLocaleDateString("en-ZA", {
@@ -35,15 +55,7 @@ function groupByDay(slots: string[]) {
   return Array.from(groups.entries());
 }
 
-export function BookingReveal({
-  contact,
-  answers,
-  result,
-}: {
-  contact: ContactDetails;
-  answers: Answers;
-  result: GateResult;
-}) {
+function DbgsBookingReveal({ contact, answers, result }: DbgsBookingProps) {
   const [slots, setSlots] = useState<string[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [booking, setBooking] = useState(false);
@@ -148,4 +160,226 @@ export function BookingReveal({
       )}
     </div>
   );
+}
+
+const TIER_DETAILS: Record<Tier, { name: string; price: string }> = {
+  1: { name: "One session", price: "R2,000" },
+  2: { name: "Two sessions", price: "R3,600" },
+  3: { name: "Three sessions", price: "R4,500" },
+};
+
+function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
+  const [format, setFormat] = useState<DeliveryFormat>("in_person");
+  const [address, setAddress] = useState("");
+  const [slots, setSlots] = useState<string[] | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [booking, setBooking] = useState(false);
+  const [booked, setBooked] = useState(false);
+  const tier = TIER_DETAILS[result.recommendedTier];
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/availability?duration=${FLUENT_INTRO_DURATION_MINUTES}&format=${format}`)
+      .then((response) => {
+        if (!response.ok) throw new Error("availability_failed");
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled) setSlots(data.slots ?? []);
+      })
+      .catch(() => {
+        if (!cancelled) setError(fluentCopy.booking.availabilityError);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [format, result.sessionMinutes]);
+
+  function chooseFormat(nextFormat: DeliveryFormat) {
+    if (nextFormat === format) return;
+    setFormat(nextFormat);
+    setSlots(null);
+    setSelectedSlot(null);
+    setError(null);
+  }
+
+  function chooseSlot(slot: string) {
+    if (format === "in_person" && address.trim() === "") return;
+    setSelectedSlot(slot);
+    setError(null);
+  }
+
+  async function confirmSlot() {
+    if (!selectedSlot || (format === "in_person" && address.trim() === "")) return;
+    setBooking(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          funnel: "fluent",
+          slot: selectedSlot,
+          contact,
+          answers,
+          result,
+          format,
+          address: format === "in_person" ? address.trim() : "",
+        }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.reason === "slot_taken") {
+          setError(fluentCopy.booking.slotTaken);
+          setSlots((current) =>
+            current ? current.filter((item) => item !== selectedSlot) : current
+          );
+          setSelectedSlot(null);
+        } else {
+          setError(fluentCopy.booking.bookingError);
+        }
+        setBooking(false);
+        return;
+      }
+
+      setBooked(true);
+    } catch {
+      setError(fluentCopy.booking.bookingError);
+    }
+    setBooking(false);
+  }
+
+  if (booked) {
+    return (
+      <div className="fluent-booking fluent-booking-confirmed" aria-live="polite">
+        <p className="fluent-kicker">{fluentCopy.booking.confirmedEyebrow}</p>
+        <h3 className="fluent-display">{fluentCopy.booking.confirmedHeadline}</h3>
+        <p>{fluentCopy.booking.confirmedBody}</p>
+      </div>
+    );
+  }
+
+  const needsAddress = format === "in_person";
+  const canChooseTime = !booking && (!needsAddress || address.trim() !== "");
+  const canConfirm = canChooseTime && selectedSlot !== null;
+
+  return (
+    <div className="fluent-booking">
+      <div className="fluent-result">
+        <p className="fluent-kicker">{fluentCopy.booking.resultEyebrow}</p>
+        <h3 className="fluent-display">{result.headline}</h3>
+        <p>{result.rationale}</p>
+      </div>
+
+      <div className="fluent-recommendation" aria-label="Recommended coaching package">
+        <span>{fluentCopy.booking.recommendationLabel}</span>
+        <strong>{tier.name}</strong>
+        <p>{tier.price} · {result.sessionMinutes} minutes per session</p>
+      </div>
+
+      <fieldset className="fluent-format-choice">
+        <legend>{fluentCopy.booking.formatLegend}</legend>
+        <div>
+          <button
+            type="button"
+            className={format === "in_person" ? "is-selected" : ""}
+            aria-pressed={format === "in_person"}
+            onClick={() => chooseFormat("in_person")}
+          >
+            <strong>{fluentCopy.booking.inPersonLabel}</strong>
+            <span>{fluentCopy.booking.inPersonNote}</span>
+          </button>
+          <button
+            type="button"
+            className={format === "remote" ? "is-selected" : ""}
+            aria-pressed={format === "remote"}
+            onClick={() => chooseFormat("remote")}
+          >
+            <strong>{fluentCopy.booking.remoteLabel}</strong>
+            <span>{fluentCopy.booking.remoteNote}</span>
+          </button>
+        </div>
+      </fieldset>
+
+      {needsAddress && (
+        <label className="fluent-address">
+          <span>{fluentCopy.booking.addressLabel}</span>
+          <input
+            type="text"
+            autoComplete="street-address"
+            value={address}
+            onChange={(event) => setAddress(event.target.value)}
+            placeholder={fluentCopy.booking.addressPlaceholder}
+          />
+          <small>{fluentCopy.booking.addressNote}</small>
+        </label>
+      )}
+
+      <div className="fluent-slot-picker">
+        <h4>{fluentCopy.booking.pickATime}</h4>
+        <p className="fluent-booking-note">{fluentCopy.booking.selectTimeNote}</p>
+        {error && <p className="fluent-booking-error">{error}</p>}
+        {needsAddress && address.trim() === "" && (
+          <p className="fluent-booking-note">{fluentCopy.booking.addressPrompt}</p>
+        )}
+        {slots === null && <p className="fluent-booking-note">{fluentCopy.booking.loadingSlots}</p>}
+        {slots !== null && slots.length === 0 && (
+          <p className="fluent-booking-note">{fluentCopy.booking.noSlots}</p>
+        )}
+        {slots !== null && slots.length > 0 && (
+          <div className="fluent-slot-days">
+            {groupByDay(slots).map(([day, daySlots]) => (
+              <div className="fluent-slot-day" key={day}>
+                <p>{day}</p>
+                <div>
+                  {daySlots.map((slot) => (
+                    <button
+                      key={slot}
+                      type="button"
+                      className={selectedSlot === slot ? "is-selected" : ""}
+                      aria-pressed={selectedSlot === slot}
+                      disabled={!canChooseTime}
+                      onClick={() => chooseSlot(slot)}
+                    >
+                      {timeLabel(slot)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {slots !== null && slots.length > 0 && (
+          <div className="fluent-slot-confirmation" aria-live="polite">
+            <div>
+              <span>{fluentCopy.booking.selectedTimeLabel}</span>
+              <strong>
+                {selectedSlot
+                  ? `${dayLabel(selectedSlot)} at ${timeLabel(selectedSlot)}`
+                  : "Select a time above"}
+              </strong>
+            </div>
+            <button
+              type="button"
+              className="fluent-button"
+              disabled={!canConfirm}
+              onClick={confirmSlot}
+            >
+              {booking ? fluentCopy.booking.confirmingTime : fluentCopy.booking.confirmTime}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function BookingReveal(props: DbgsBookingProps | FluentBookingProps) {
+  if (props.funnel === "fluent") {
+    return <FluentBookingReveal {...props} />;
+  }
+  return <DbgsBookingReveal {...props} />;
 }

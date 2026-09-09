@@ -1,0 +1,217 @@
+.stage[data-example="dinner"]{background:radial-gradient(ellipse at 35% 60%,#f4f2e8 0%,#e8eee7 74%)}
+.dinner-look-layout{display:grid;grid-template-columns:1.5fr 1fr;gap:30px;max-width:900px;margin:24px auto 0;align-items:center}
+.dinner-photo-card{margin:0;background:var(--paper);border:1px solid #d8decf;border-radius:10px;overflow:hidden;box-shadow:0 20px 38px -27px #173d435a;transform:rotate(-1.5deg)}
+.dinner-photo-card img{display:block;width:100%;height:280px;object-fit:cover}
+.dinner-photo-card figcaption{display:flex;align-items:center;gap:7px;padding:13px 14px;font-size:12px;line-height:1.4;color:#58695b}
+.dinner-photo-card figcaption>span:last-child{margin-left:auto;font-size:9px;color:#6c7767;white-space:nowrap}
+.dinner-photo-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#a26a41;flex-shrink:0}
+.dinner-reading-card{padding:9px 0}
+.dinner-card-kicker{font-size:10px;line-height:1.4;letter-spacing:1.2px;font-weight:650;color:#58724f;margin:0 0 12px}
+.dinner-ingredient-reading{padding:0;margin:0;list-style:none}
+.dinner-ingredient-reading li{display:flex;align-items:center;gap:11px;min-height:41px;border-bottom:1px solid #d7dfcf;font-size:17px}
+.dinner-read-check{width:19px;color:#648151;font-size:16px}
+.dinner-bean-row{transition:background .5s,color .5s;background:#fff0d8;color:#825523;margin:0 -9px;padding:0 9px;border-radius:4px}
+.dinner-bean-check{color:inherit}
+.dinner-corrected-tag{margin-left:auto;border:1px solid #b9ccb0;border-radius:3px;padding:3px 6px;font-size:9px;opacity:0;transition:opacity .5s}
+.dinner-correction{display:flex;align-items:center;gap:9px;background:#fffdf8;border:1px solid #d5decf;border-radius:0 8px 8px 8px;padding:10px 12px;margin-top:14px;opacity:0;transform:translateY(7px);transition:opacity .6s,transform .6s}
+.dinner-person-label{font-size:9px;font-weight:650;letter-spacing:1px;color:#70785f}
+.dinner-correction p{font-size:15px;line-height:1.45;margin:0}
+.dinner-look-guidance{font-size:14px;line-height:1.7;color:#62715c;margin:16px 0 0}
+.dinner-look-guidance strong{font-weight:550;color:#3b5744}
+.stage[data-example="dinner"][data-phase="0"]:not([data-moment="0"]) .dinner-correction{opacity:1;transform:none}
+.stage[data-example="dinner"][data-phase="0"]:not([data-moment="0"]) .dinner-bean-row{background:#e0ebd7;color:#385d36}
+.stage[data-example="dinner"][data-phase="0"]:not([data-moment="0"]) .dinner-corrected-tag{opacity:1}
+.dinner-ask-layout{display:grid;grid-template-columns:minmax(0,590px) 205px;align-items:center;justify-content:center;gap:48px;margin:26px auto 0;max-width:900px}
+.dinner-prompt-card{padding:20px 24px 0;border:1px solid #d6dfce;background:var(--paper);border-radius:12px;box-shadow:0 20px 36px -25px #173d4350}
+.dinner-photo-chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;line-height:1.4;color:#59724f;background:#f0f3e9;border:1px solid #d8e1cf;padding:6px 8px;border-radius:4px}
+.dinner-photo-chip svg{width:14px;height:16px}
+.dinner-original-prompt{font-size:23px;line-height:1.4;margin:20px 0 21px;letter-spacing:-.4px}
+.dinner-prompt-addition{border-left:3px solid #8da77a;padding:0 0 0 14px;opacity:0;transform:translateY(7px);transition:opacity .65s,transform .65s}
+.dinner-prompt-addition .dinner-card-kicker{font-size:9px;margin-bottom:8px}
+.dinner-constraints{font-size:22px;line-height:1.5;margin:0 0 10px;letter-spacing:-.3px}
+.dinner-constraints mark{background:#e3edda;color:inherit;border-radius:2px;padding:1px 3px}
+.dinner-pantry{font-size:16px;line-height:1.55;max-width:440px;margin:0;color:#516849}
+.dinner-prompt-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #dce4d3;margin-top:19px;padding:12px 0;font-size:11px;color:#62755a}
+.dinner-prompt-arrow{width:28px;height:28px;background:#21493f;border-radius:5px;display:grid;place-items:center;color:#fffdf8}
+.dinner-prompt-arrow svg{width:17px;height:17px;transform:rotate(-90deg)}
+.dinner-coach-note h3{font-size:29px;line-height:1.2;font-weight:500;letter-spacing:-.9px;margin:0 0 16px}
+.dinner-coach-note>p:last-child{font-size:16px;line-height:1.7;color:#597052;margin:0}
+.dinner-note-rule{display:block;height:3px;width:35px;background:#859f76;margin-bottom:19px}
+.stage[data-example="dinner"][data-phase="1"]:not([data-moment="0"]) .dinner-prompt-addition{opacity:1;transform:none}
+.dinner-adapt-layout{display:grid;grid-template-columns:minmax(0,350px) 92px minmax(0,350px);justify-content:center;align-items:center;margin:27px auto 0;max-width:850px}
+.dinner-method-card{border:1px solid #d3dccb;background:#fafaf1;border-radius:10px;padding:18px 23px 0;box-shadow:0 16px 28px -23px #29473448;text-align:center;overflow:hidden}
+.dinner-method-card .dinner-card-kicker{font-size:9px}
+.dinner-appliance{width:99px;height:80px;stroke-width:1.9;margin:0 auto 5px;color:#867c65}
+.dinner-method-card h3{font-size:23px;font-weight:550;letter-spacing:-.5px;line-height:1.25;margin:5px 0 9px}
+.dinner-method-card>p:not(.dinner-card-kicker){font-size:16px;line-height:1.6;color:#717461;margin:0 0 20px}
+.dinner-method-status{display:flex;align-items:center;justify-content:center;gap:8px;min-height:43px;font-size:12px;background:#ecebdd;color:#79745d;padding:10px 6px;margin:0 -23px;line-height:1.4}
+.dinner-method-status>span{font-size:22px;line-height:1}
+.dinner-method-status svg{width:15px;height:15px}
+.dinner-plan-change{display:flex;flex-direction:column;align-items:center;gap:13px;color:#5c7951;opacity:0;transform:translateX(-8px);transition:opacity .55s,transform .65s}
+.dinner-plan-change span{font-size:11px;font-weight:600;border:1px solid #bacbb0;border-radius:20px;background:#e6efdc;padding:5px 8px}
+.dinner-plan-change svg{width:40px;height:23px}
+.dinner-pan-card{background:#fffdf7;border-color:#b8ccac;opacity:0;transform:translateX(14px);transition:opacity .65s,transform .65s;transition-delay:.12s}
+.dinner-pan-card .dinner-appliance{color:#527649}
+.dinner-pan-card>p:not(.dinner-card-kicker){color:#58714e}
+.dinner-pan-card .dinner-method-status{color:#45653b;background:#e5efda}
+.dinner-adapt-takeaway{text-align:center;font-size:15px;line-height:1.5;margin:22px 0 0;color:#617359}
+.dinner-adapt-takeaway strong{font-weight:550;color:#3b5e3d}
+.stage[data-example="dinner"][data-phase="2"]:not([data-moment="0"]) .dinner-plan-change,.stage[data-example="dinner"][data-phase="2"]:not([data-moment="0"]) .dinner-pan-card{opacity:1;transform:none}
+.dinner-recipe{max-width:850px;margin:23px auto 0;background:var(--paper);border:1px solid #ccd9c3;border-radius:10px;box-shadow:0 18px 32px -25px #29473455;overflow:hidden}
+.dinner-recipe-heading{display:flex;align-items:center;justify-content:space-between;padding:19px 25px 0;gap:15px}
+.dinner-recipe-heading .dinner-card-kicker{font-size:9px;margin-bottom:6px}
+.dinner-recipe-heading h3{font-size:25px;line-height:1.15;letter-spacing:-.7px;font-weight:550;margin:0}
+.dinner-recipe-heading h3 br{display:none}
+.dinner-recipe-seal{display:grid;place-items:center;width:32px;height:32px;border:1px solid #a9c198;background:#e9f0e1;border-radius:50%;color:#62894b;flex-shrink:0}
+.dinner-recipe-seal svg{width:20px;height:20px}
+.dinner-recipe-tags{display:flex;gap:8px;padding:14px 25px 15px}
+.dinner-recipe-tags span{font-size:11px;line-height:1.4;padding:4px 8px;background:#eef3e6;border-radius:4px;color:#5b7550}
+.dinner-recipe-body{display:grid;grid-template-columns:1fr 1.15fr;gap:28px;margin:0 25px 16px;border-top:1px solid #e0e6d7;padding-top:14px}
+.dinner-recipe-body h4{font-size:11px;line-height:1.4;color:#5c714f;font-weight:650;text-transform:uppercase;letter-spacing:.7px;margin:0 0 10px}
+.dinner-recipe-ingredients ul{list-style:none;margin:0;padding:0}
+.dinner-recipe-ingredients li{font-size:16px;line-height:1.55;color:#4d6348;margin-bottom:3px}
+.dinner-recipe-method ol{list-style:none;margin:0;padding:0}
+.dinner-recipe-method li{display:flex;align-items:flex-start;gap:11px;margin-bottom:9px}
+.dinner-recipe-method li:last-child{margin-bottom:0}
+.dinner-recipe-method li>span{font-size:11px;font-weight:650;width:21px;height:21px;display:grid;place-items:center;background:#e4ecd9;color:#567846;border-radius:50%;flex-shrink:0;margin-top:1px}
+.dinner-recipe-method p{font-size:16px;line-height:1.5;margin:0;color:#486043}
+.dinner-recipe-method p strong{font-weight:600}
+.dinner-recipe-method p br{display:none}
+.dinner-recipe-footer{display:flex;align-items:center;gap:8px;padding:11px 25px;border-top:1px solid #dce5d2;background:#eef3e5;font-size:12px;line-height:1.4;color:#567349}
+.dinner-recipe-footer svg{width:15px;height:15px}
+@media(max-width:1050px){
+  .dinner-look-layout{gap:24px;grid-template-columns:1.4fr 1fr}
+  .dinner-photo-card img{height:276px}
+  .dinner-photo-card figcaption{font-size:10px}
+  .dinner-photo-card figcaption>span:last-child{font-size:8px}
+  .dinner-ingredient-reading li{font-size:16px}
+  .dinner-correction p{font-size:14px}
+  .dinner-ask-layout{gap:30px;grid-template-columns:minmax(0,1fr) 174px}
+  .dinner-coach-note h3{font-size:27px}
+  .dinner-coach-note>p:last-child{font-size:15px}
+  .dinner-original-prompt{font-size:22px}
+  .dinner-constraints{font-size:21px}
+  .dinner-pantry{font-size:15px}
+  .dinner-adapt-layout{grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr)}
+  .dinner-method-card{padding-left:18px;padding-right:18px}
+  .dinner-method-status{margin-left:-18px;margin-right:-18px;font-size:11px}
+  .dinner-method-card h3{font-size:21px}
+  .dinner-method-card>p:not(.dinner-card-kicker){font-size:15px}
+  .dinner-recipe-heading h3{font-size:24px}
+  .dinner-recipe-body{gap:20px;grid-template-columns:1fr 1.2fr}
+}
+@media(max-width:760px){
+  .dinner-look-layout{display:flex;flex-direction:column;gap:18px;max-width:480px;margin-top:23px;align-items:stretch}
+  .dinner-photo-card{transform:rotate(-1deg)}
+  .dinner-photo-card img{height:205px;object-position:center 48%}
+  .dinner-photo-card figcaption{font-size:10px;padding:10px 12px}
+  .dinner-photo-card figcaption>span:last-child{font-size:8px}
+  .dinner-reading-card{padding:0 3px}
+  .dinner-reading-card>.dinner-card-kicker{font-size:9px;margin-bottom:6px}
+  .dinner-ingredient-reading{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+  .dinner-ingredient-reading li{min-height:37px;font-size:16px;gap:7px}
+  .dinner-ingredient-reading li:nth-child(3){grid-row:2;grid-column:1}
+  .dinner-corrected-tag{display:none}
+  .dinner-correction{margin-top:12px;padding:9px 12px}
+  .dinner-correction p{font-size:15px}
+  .dinner-look-guidance{font-size:14px;line-height:1.55;margin-top:12px}
+  .dinner-look-guidance br{display:none}
+  .dinner-ask-layout{display:block;max-width:480px;margin-top:24px}
+  .dinner-prompt-card{padding:19px 20px 0}
+  .dinner-original-prompt{font-size:22px;margin:18px 0}
+  .dinner-photo-chip{font-size:10px}
+  .dinner-prompt-addition .dinner-card-kicker{font-size:8px}
+  .dinner-constraints{font-size:21px;margin-bottom:10px}
+  .dinner-pantry{font-size:15px;line-height:1.55}
+  .dinner-prompt-footer{margin-top:17px;padding:10px 0;font-size:10px}
+  .dinner-coach-note{margin:23px 0 0;padding-left:16px;border-left:2px solid #8bA37a}
+  .dinner-note-rule{display:none}
+  .dinner-coach-note .dinner-card-kicker{font-size:9px;margin-bottom:6px}
+  .dinner-coach-note h3{font-size:23px;margin:0 0 8px}
+  .dinner-coach-note h3 br{display:none}
+  .dinner-coach-note>p:last-child{font-size:14px;line-height:1.6}
+  .dinner-coach-note>p:last-child br{display:none}
+  .dinner-adapt-layout{grid-template-columns:1fr;grid-template-rows:167px 49px 181px;max-width:480px;margin-top:24px}
+  .dinner-method-card{display:grid;grid-template-columns:82px 1fr;grid-template-rows:auto auto 1fr auto;column-gap:10px;text-align:left;padding:14px 18px 0;height:100%;align-items:start}
+  .dinner-method-card .dinner-card-kicker{grid-column:2;font-size:8px;margin:0 0 5px}
+  .dinner-appliance{grid-column:1;grid-row:1/4;width:79px;height:72px;margin:auto 0;align-self:center}
+  .dinner-method-card h3{grid-column:2;font-size:21px;margin:0 0 6px;line-height:1.2}
+  .dinner-method-card>p:not(.dinner-card-kicker){grid-column:2;font-size:14px;line-height:1.5;margin:0 0 11px}
+  .dinner-method-status{grid-column:1/3;font-size:11px;min-height:36px;margin:0 -18px;padding:8px 7px}
+  .dinner-plan-change{flex-direction:row;justify-content:center;gap:8px;transform:translateY(-6px)}
+  .dinner-plan-change svg{transform:rotate(90deg);width:24px;height:24px}
+  .dinner-plan-change span{font-size:10px;padding:4px 9px}
+  .dinner-pan-card{transform:translateY(10px)}
+  .dinner-adapt-takeaway{max-width:400px;margin:22px auto 0;font-size:14px;line-height:1.6}
+  .dinner-adapt-takeaway strong{display:block}
+  .dinner-recipe{max-width:480px;margin-top:22px}
+  .dinner-recipe-heading{padding:16px 19px 0;gap:7px}
+  .dinner-recipe-heading h3{font-size:23px;line-height:1.2}
+  .dinner-recipe-heading h3 br{display:block}
+  .dinner-recipe-heading .dinner-card-kicker{font-size:8px;margin-bottom:6px}
+  .dinner-recipe-seal{width:28px;height:28px}
+  .dinner-recipe-tags{gap:6px;flex-wrap:wrap;padding:13px 19px}
+  .dinner-recipe-tags span{font-size:10px;padding:4px 6px}
+  .dinner-recipe-body{grid-template-columns:1fr;gap:12px;margin:0 19px 14px;padding-top:13px}
+  .dinner-recipe-body h4{font-size:10px;margin-bottom:7px}
+  .dinner-recipe-ingredients ul{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px}
+  .dinner-recipe-ingredients li{font-size:14px;line-height:1.45;margin:0}
+  .dinner-recipe-ingredients li:first-child{grid-column:1/3}
+  .dinner-recipe-method{border-top:1px solid #e2e7d8;padding-top:12px}
+  .dinner-recipe-method li{gap:9px;margin-bottom:8px}
+  .dinner-recipe-method p{font-size:14px;line-height:1.5}
+  .dinner-recipe-method li>span{width:19px;height:19px;font-size:10px}
+  .dinner-recipe-footer{padding:11px 19px;font-size:11px;gap:8px;line-height:1.5}
+}
+@media(max-width:430px){
+  .dinner-look-layout{margin-top:22px;gap:18px}
+  .dinner-photo-card img{height:201px}
+  .dinner-photo-card figcaption>span:last-child{display:none}
+  .dinner-ingredient-reading li{font-size:15px;min-height:38px}
+  .dinner-look-guidance{font-size:14px}
+  .dinner-original-prompt{font-size:21px}
+  .dinner-constraints{font-size:20px}
+  .dinner-pantry{font-size:14px}
+  .dinner-prompt-card{padding-left:17px;padding-right:17px}
+  .dinner-prompt-addition{padding-left:11px}
+  .dinner-coach-note h3{font-size:22px}
+  .dinner-coach-note>p:last-child{font-size:14px}
+  .dinner-method-card{grid-template-columns:68px 1fr;padding-left:15px;padding-right:15px;column-gap:9px}
+  .dinner-appliance{width:64px;height:65px}
+  .dinner-method-card h3{font-size:19px}
+  .dinner-method-card>p:not(.dinner-card-kicker){font-size:14px}
+  .dinner-method-status{margin-left:-15px;margin-right:-15px;font-size:11px}
+  .dinner-recipe-heading{padding-left:16px;padding-right:16px}
+  .dinner-recipe-heading h3{font-size:21px}
+  .dinner-recipe-seal{display:none}
+  .dinner-recipe-tags{padding-left:16px;padding-right:16px;gap:5px}
+  .dinner-recipe-tags span{font-size:10px;padding:4px 6px}
+  .dinner-recipe-body{margin-left:16px;margin-right:16px}
+  .dinner-recipe-ingredients li{font-size:14px}
+  .dinner-recipe-method p{font-size:14px}
+  .dinner-recipe-footer{padding-left:16px;padding-right:16px;font-size:10px}
+}
+@media(max-width:350px){
+  .dinner-ingredient-reading{column-gap:14px}
+  .dinner-photo-card img{height:185px}
+  .dinner-photo-card figcaption{font-size:9px}
+  .dinner-ingredient-reading li{font-size:14px}
+  .dinner-look-guidance{font-size:13px}
+  .dinner-original-prompt{font-size:20px}
+  .dinner-photo-chip{font-size:9px}
+  .dinner-prompt-addition .dinner-card-kicker{font-size:7px}
+  .dinner-constraints{font-size:18px}
+  .dinner-pantry{font-size:14px}
+  .dinner-coach-note>p:last-child{font-size:13px}
+  .dinner-method-card{grid-template-columns:56px 1fr;column-gap:7px;padding-left:12px;padding-right:12px}
+  .dinner-appliance{width:54px;height:60px}
+  .dinner-method-card h3{font-size:18px}
+  .dinner-method-card .dinner-card-kicker{font-size:7px}
+  .dinner-method-status{margin-left:-12px;margin-right:-12px;font-size:10px}
+  .dinner-recipe-heading h3{font-size:20px}
+  .dinner-recipe-tags{gap:4px}
+  .dinner-recipe-tags span{font-size:10px}
+  .dinner-recipe-body{gap:10px}
+  .dinner-recipe-ingredients li{font-size:14px}
+  .dinner-recipe-method p{font-size:14px}
+}

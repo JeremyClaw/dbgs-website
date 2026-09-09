@@ -1,5 +1,5 @@
 import { Section } from "@/components/ui/Section";
-import { FitAssessment } from "@/components/survey/FitAssessment";
+import { DbgsFitAssessment } from "@/components/survey/DbgsFitAssessment";
 import { copy } from "@/lib/copy";
 
 export function CTA() {
@@ -17,7 +17,7 @@ export function CTA() {
         <p className="text-gray-400 text-sm">{cta.subhead}</p>
       </div>
 
-      <FitAssessment />
+      <DbgsFitAssessment />
 
       {/* Low-commitment path. See the note on cta.fallbackLabel in lib/copy.ts
           for why this is an email and not a booking link. */}

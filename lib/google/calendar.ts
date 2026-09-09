@@ -1,7 +1,8 @@
 import { google } from "googleapis";
 import { getOAuth2Client } from "./auth";
+import { overlapsWithBuffer } from "../fluent-booking";
 
-// Slot rules — editable without touching any UI code.
+// Slot rules, editable without touching any UI code.
 const TIMEZONE = "Africa/Johannesburg"; // SAST, fixed UTC+2, no DST
 const WORK_START_HOUR = 9;
 const WORK_END_HOUR = 17;
@@ -54,14 +55,24 @@ function isWeekday(year: number, month: number, day: number) {
 type Slot = { start: Date; end: Date };
 
 function normaliseDuration(durationMinutes: number) {
-  return durationMinutes === 15 ? 15 : DEFAULT_SLOT_DURATION_MINUTES;
+  return [15, 30, 60, 90].includes(durationMinutes)
+    ? durationMinutes
+    : DEFAULT_SLOT_DURATION_MINUTES;
 }
 
-function generateCandidateSlots(daysAhead: number, durationMinutes: number): Slot[] {
+function normaliseBuffer(bufferMinutes: number) {
+  return bufferMinutes === 60 ? 60 : BUFFER_MINUTES;
+}
+
+function generateCandidateSlots(
+  daysAhead: number,
+  durationMinutes: number,
+  bufferMinutes: number
+): Slot[] {
   const now = nowInSAST();
   const slots: Slot[] = [];
   const duration = normaliseDuration(durationMinutes);
-  const step = duration + BUFFER_MINUTES;
+  const step = duration + normaliseBuffer(bufferMinutes);
 
   for (let offset = 0; offset <= daysAhead; offset++) {
     const { year, month, day } = addDays(now.year, now.month, now.day, offset);
@@ -110,26 +121,38 @@ async function getBusyBlocks(timeMin: Date, timeMax: Date) {
 
 export async function getAvailableSlots(
   daysAhead: number = DEFAULT_DAYS_AHEAD,
-  durationMinutes: number = DEFAULT_SLOT_DURATION_MINUTES
+  durationMinutes: number = DEFAULT_SLOT_DURATION_MINUTES,
+  bufferMinutes: number = BUFFER_MINUTES
 ) {
-  const candidates = generateCandidateSlots(daysAhead, durationMinutes);
+  const duration = normaliseDuration(durationMinutes);
+  const buffer = normaliseBuffer(bufferMinutes);
+  const candidates = generateCandidateSlots(daysAhead, duration, buffer);
   if (candidates.length === 0) return [];
 
-  const timeMin = candidates[0].start;
-  const timeMax = candidates[candidates.length - 1].end;
+  const timeMin = new Date(candidates[0].start.getTime() - buffer * 60 * 1000);
+  const timeMax = new Date(candidates[candidates.length - 1].end.getTime() + buffer * 60 * 1000);
   const busy = await getBusyBlocks(timeMin, timeMax);
 
   return candidates
-    .filter((slot) => !busy.some((b) => overlaps(slot.start, slot.end, b.start, b.end)))
+    .filter((slot) => {
+      return !busy.some((block) => overlapsWithBuffer(slot, block, buffer));
+    })
     .map((slot) => slot.start.toISOString());
 }
 
-export async function isSlotStillFree(startISO: string, durationMinutes: number = DEFAULT_SLOT_DURATION_MINUTES) {
+export async function isSlotStillFree(
+  startISO: string,
+  durationMinutes: number = DEFAULT_SLOT_DURATION_MINUTES,
+  bufferMinutes: number = BUFFER_MINUTES
+) {
   const duration = normaliseDuration(durationMinutes);
+  const buffer = normaliseBuffer(bufferMinutes);
   const start = new Date(startISO);
   const end = new Date(start.getTime() + duration * 60 * 1000);
-  const busy = await getBusyBlocks(start, end);
-  return !busy.some((b) => overlaps(start, end, b.start, b.end));
+  const bufferedStart = new Date(start.getTime() - buffer * 60 * 1000);
+  const bufferedEnd = new Date(end.getTime() + buffer * 60 * 1000);
+  const busy = await getBusyBlocks(bufferedStart, bufferedEnd);
+  return !busy.some((block) => overlaps(bufferedStart, bufferedEnd, block.start, block.end));
 }
 
 export async function createBookingEvent({
@@ -141,6 +164,10 @@ export async function createBookingEvent({
   instagram,
   externalLabel,
   durationMinutes,
+  bufferMinutes = BUFFER_MINUTES,
+  eventTitle,
+  eventDescription,
+  location,
 }: {
   slot: string;
   name: string;
@@ -150,9 +177,13 @@ export async function createBookingEvent({
   instagram?: string;
   externalLabel: string;
   durationMinutes: number;
+  bufferMinutes?: number;
+  eventTitle?: string;
+  eventDescription?: string;
+  location?: string;
 }) {
   const duration = normaliseDuration(durationMinutes);
-  const free = await isSlotStillFree(slot, duration);
+  const free = await isSlotStillFree(slot, duration, bufferMinutes);
   if (!free) {
     return { success: false as const, reason: "slot_taken" as const };
   }
@@ -167,8 +198,11 @@ export async function createBookingEvent({
     calendarId: "primary",
     sendUpdates: "all",
     requestBody: {
-      summary: `${name} - ${externalLabel} with DBGS`,
-      description: `${externalLabel} with DB Growth Solutions.\n\nName: ${name}\nEmail: ${email}${company ? `\nCompany: ${company}` : ""}${storeUrl ? `\nStore: ${storeUrl}` : ""}${instagram ? `\nInstagram: ${instagram}` : ""}`,
+      summary: eventTitle ?? `${name} - ${externalLabel} with DBGS`,
+      description:
+        eventDescription ??
+        `${externalLabel} with DB Growth Solutions.\n\nName: ${name}\nEmail: ${email}${company ? `\nCompany: ${company}` : ""}${storeUrl ? `\nStore: ${storeUrl}` : ""}${instagram ? `\nInstagram: ${instagram}` : ""}`,
+      location,
       start: { dateTime: start.toISOString(), timeZone: TIMEZONE },
       end: { dateTime: end.toISOString(), timeZone: TIMEZONE },
       attendees: [{ email, displayName: name }],

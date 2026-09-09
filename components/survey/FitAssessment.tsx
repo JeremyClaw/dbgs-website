@@ -1,14 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { questions, type Answers, type ContactDetails } from "./questions";
-import { evaluate, type GateResult } from "./gate";
+import type { Answers, ContactDetails, Question } from "./questions";
+import type { GateResult } from "./gate";
 import { BookingReveal } from "./BookingReveal";
 
-const TOTAL_STEPS = questions.length + 1; // + contact step
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function FitAssessment() {
+type FitAssessmentProps = {
+  questions: Question[];
+  evaluate: (answers: Answers) => GateResult;
+};
+
+export function FitAssessment({ questions, evaluate }: FitAssessmentProps) {
+  const totalSteps = questions.length + 1; // + contact step
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [contact, setContact] = useState<ContactDetails>({
@@ -22,7 +27,7 @@ export function FitAssessment() {
   const [result, setResult] = useState<GateResult | null>(null);
 
   const isContactStep = stepIndex === questions.length;
-  const progress = Math.round(((stepIndex + 1) / TOTAL_STEPS) * 100);
+  const progress = Math.round(((stepIndex + 1) / totalSteps) * 100);
 
   function selectAnswer(questionId: string, value: string) {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -33,7 +38,7 @@ export function FitAssessment() {
   }
 
   function goNext() {
-    setStepIndex((i) => Math.min(TOTAL_STEPS - 1, i + 1));
+    setStepIndex((i) => Math.min(totalSteps - 1, i + 1));
   }
 
   async function submit() {
@@ -48,7 +53,7 @@ export function FitAssessment() {
         body: JSON.stringify({ answers, contact, pass: gateResult.pass, reason: gateResult.reason }),
       });
     } catch {
-      // Non-fatal — the gate result still renders below even if the notify email fails.
+      // Non-fatal: the gate result still renders below even if the notify email fails.
     }
 
     setSubmitting(false);
@@ -71,7 +76,7 @@ export function FitAssessment() {
       <div className="px-7 pt-7">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] font-bold uppercase tracking-widest text-gray-400">
-            Step {stepIndex + 1} of {TOTAL_STEPS}
+            Step {stepIndex + 1} of {totalSteps}
           </span>
           <span className="text-[11px] font-bold text-[#1fb8a0]">{progress}%</span>
         </div>

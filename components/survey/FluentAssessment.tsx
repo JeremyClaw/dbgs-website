@@ -5,12 +5,9 @@ import { BookingReveal } from "./BookingReveal";
 import type { FluentResult } from "./gate-ai";
 import type {
   FluentAnswers,
-  FluentContactDetails,
   FluentQuestion,
   FluentQuestionScreen,
 } from "./questions-ai";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type FluentAssessmentProps = {
   screens: FluentQuestionScreen[];
@@ -28,18 +25,11 @@ export function FluentAssessment({ screens, evaluate }: FluentAssessmentProps) {
   const hasRendered = useRef(false);
   const [screenIndex, setScreenIndex] = useState(0);
   const [answers, setAnswers] = useState<FluentAnswers>({});
-  const [contact, setContact] = useState<FluentContactDetails>({ name: "", email: "", mobile: "" });
   const [result, setResult] = useState<FluentResult | null>(null);
-  const [submitting, setSubmitting] = useState(false);
 
-  const isContactStep = screenIndex === screens.length;
-  const screen = isContactStep ? null : screens[screenIndex];
-  const progress = isContactStep ? 100 : Math.round(((screenIndex + 1) / screens.length) * 100);
-  const canProceed = screen
-    ? screen.questions.every((question) => hasAnswer(question, answers))
-    : contact.name.trim() !== "" &&
-      EMAIL_PATTERN.test(contact.email.trim()) &&
-      contact.mobile.trim() !== "";
+  const screen = screens[screenIndex];
+  const progress = Math.round(((screenIndex + 1) / screens.length) * 100);
+  const canProceed = screen.questions.every((question) => hasAnswer(question, answers));
 
   useEffect(() => {
     if (!hasRendered.current) {
@@ -49,10 +39,15 @@ export function FluentAssessment({ screens, evaluate }: FluentAssessmentProps) {
 
     const frame = window.requestAnimationFrame(() => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      flowTopRef.current?.scrollIntoView({
-        behavior: reducedMotion ? "auto" : "smooth",
-        block: "start",
-      });
+      const assessmentPanel = flowTopRef.current?.closest(".fluent-assessment-section");
+      if (assessmentPanel instanceof HTMLElement) {
+        assessmentPanel.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+      } else {
+        flowTopRef.current?.scrollIntoView({
+          behavior: reducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      }
     });
 
     return () => window.cancelAnimationFrame(frame);
@@ -82,26 +77,12 @@ export function FluentAssessment({ screens, evaluate }: FluentAssessmentProps) {
   }
 
   function goNext() {
-    setScreenIndex((current) => Math.min(screens.length, current + 1));
-  }
-
-  async function submit() {
     if (!canProceed) return;
-    setSubmitting(true);
-    const gateResult = evaluate(answers);
-    setResult(gateResult);
-
-    try {
-      await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ funnel: "fluent", answers, contact, result: gateResult }),
-      });
-    } catch {
-      // The result remains useful if the notification email is temporarily unavailable.
+    if (screenIndex === screens.length - 1) {
+      setResult(evaluate(answers));
+      return;
     }
-
-    setSubmitting(false);
+    setScreenIndex((current) => current + 1);
   }
 
   if (result) {
@@ -109,7 +90,6 @@ export function FluentAssessment({ screens, evaluate }: FluentAssessmentProps) {
       <div ref={flowTopRef} className="fluent-assessment-flow-top">
         <BookingReveal
           funnel="fluent"
-          contact={contact}
           answers={answers}
           result={result}
         />
@@ -121,7 +101,7 @@ export function FluentAssessment({ screens, evaluate }: FluentAssessmentProps) {
     <div ref={flowTopRef} className="fluent-assessment" aria-live="polite">
       <div className="fluent-assessment-progress">
         <div>
-          <span>{isContactStep ? "Assessment complete" : `Section ${screenIndex + 1} of ${screens.length}`}</span>
+          <span>{`Section ${screenIndex + 1} of ${screens.length}`}</span>
           <span>{progress}%</span>
         </div>
         <div className="fluent-progress-track" aria-hidden="true">
@@ -129,8 +109,7 @@ export function FluentAssessment({ screens, evaluate }: FluentAssessmentProps) {
         </div>
       </div>
 
-      {screen && (
-        <div>
+      <div>
           <h3 className="fluent-assessment-title">{screen.title}</h3>
           {screen.intro && <p className="fluent-assessment-intro">{screen.intro}</p>}
           <div className="fluent-question-list">
@@ -186,65 +165,15 @@ export function FluentAssessment({ screens, evaluate }: FluentAssessmentProps) {
               );
             })}
           </div>
-        </div>
-      )}
-
-      {isContactStep && (
-        <div>
-          <h3 className="fluent-assessment-title">A few details before your result</h3>
-          <p className="fluent-assessment-intro">
-            These details help me prepare if you decide to book a call. Your recommendation appears next.
-          </p>
-          <div className="fluent-contact-grid">
-            <label>
-              <span>Name</span>
-              <input
-                type="text"
-                autoComplete="name"
-                value={contact.name}
-                onChange={(event) => setContact((current) => ({ ...current, name: event.target.value }))}
-              />
-            </label>
-            <label>
-              <span>Email</span>
-              <input
-                type="email"
-                autoComplete="email"
-                value={contact.email}
-                onChange={(event) => setContact((current) => ({ ...current, email: event.target.value }))}
-              />
-            </label>
-            <label>
-              <span>Mobile</span>
-              <input
-                type="tel"
-                autoComplete="tel"
-                value={contact.mobile}
-                onChange={(event) => setContact((current) => ({ ...current, mobile: event.target.value }))}
-              />
-            </label>
-          </div>
-        </div>
-      )}
+      </div>
 
       <div className="fluent-assessment-actions">
         <button type="button" className="fluent-back" onClick={goBack} disabled={screenIndex === 0}>
           Back
         </button>
-        {isContactStep ? (
-          <button
-            type="button"
-            className="fluent-button"
-            disabled={!canProceed || submitting}
-            onClick={submit}
-          >
-            {submitting ? "Preparing your result..." : "See your result"}
-          </button>
-        ) : (
-          <button type="button" className="fluent-button" disabled={!canProceed} onClick={goNext}>
-            Continue
-          </button>
-        )}
+        <button type="button" className="fluent-button" disabled={!canProceed} onClick={goNext}>
+          {screenIndex === screens.length - 1 ? "See your recommendation" : "Continue"}
+        </button>
       </div>
     </div>
   );

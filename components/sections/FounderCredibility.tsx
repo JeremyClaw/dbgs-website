@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Section } from "@/components/ui/Section";
 import { copy } from "@/lib/copy";
 
@@ -10,7 +11,7 @@ export function FounderCredibility() {
         <div className="flex flex-col items-center gap-3 shrink-0">
           <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[#1fb8a0] to-[#2563eb] flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
             {founder.photo ? (
-              <img src={founder.photo} alt={founder.name} className="w-full h-full object-cover" />
+              <Image src={founder.photo} alt={founder.name} width={112} height={112} className="w-full h-full object-cover" />
             ) : (
               "DB"
             )}

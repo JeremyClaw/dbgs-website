@@ -1,7 +1,7 @@
 export const fluentCopy = {
   brand: {
-    name: "Fluent",
-    descriptor: "AI, made useful",
+    name: "AI, made clear",
+    descriptor: "Practical AI coaching",
   },
   nav: {
     cta: "Take the assessment",
@@ -67,13 +67,13 @@ export const fluentCopy = {
     recommendationLabel: "My recommendation",
     formatLegend: "How would you like to meet?",
     inPersonLabel: "In person",
-    inPersonNote: "At your Cape Town office",
+    inPersonNote: "In Cape Town, by arrangement",
     remoteLabel: "Remote",
     remoteNote: "By private video call",
     addressLabel: "Where in Cape Town should we meet?",
-    addressPlaceholder: "Office address",
+    addressPlaceholder: "Meeting address",
     addressNote: "I will confirm the location with you before the call.",
-    addressPrompt: "Add your office address before choosing an in-person time.",
+    addressPrompt: "Add the meeting address before choosing an in-person time.",
     pickATime: "Choose a time for your free 15-minute call",
     selectTimeNote: "Select a time below. Nothing will be booked until you confirm.",
     selectedTimeLabel: "Your selected time",
@@ -98,19 +98,45 @@ export const fluentCopy = {
       { name: "Three sessions", price: "R4,500", detail: "R1,500 per session", saving: "Save R1,500 · 25%", featured: true },
     ],
     upgrade:
-      "Book a single session first if you would rather. If you carry on within thirty days, R1,500 of it comes off the package.",
+      "If you book a package within 48 hours of your first session, the R2,000 already paid becomes the first session in that package. You then pay R1,600 more for two sessions in total, or R2,500 more for three sessions in total. It does not add another session. After 48 hours there is no credit.",
+    credit:
+      "Book a package within 48 hours of your first session and the R2,000 already paid becomes its first session. Pay only the balance: R1,600 for two sessions in total, or R2,500 for three. After 48 hours there is no credit.",
+    riskReversal: "If your first session is not useful, you do not pay for any further sessions.",
+    payment:
+      "You pay by EFT after your free call, once you have chosen your sessions. No card details are taken on this site.",
     returning: "Past clients can book individual follow-up sessions at R1,500.",
   },
   founder: {
     eyebrow: "Your coach",
     name: "Deej Burke",
-    title: "Founder, DB Growth Solutions and co-founder, ThirstyBird",
+    title: "Your AI coach",
     body: [
-      "I run AI across two businesses every day: a performance marketing studio and a hospitality technology startup. Everything I teach is something I use on my own operation that morning.",
-      "This is not theory, and it is not a course I bought and repackaged.",
+      "I use AI every day to plan, write, research and handle real work. I know where it saves time, where it gets things wrong and what you should always check for yourself.",
+      "My job is to make it feel clear and useful. We work at your pace, using examples that matter in your life. You can ask basic questions, repeat a step or stop me whenever something does not make sense.",
+      "You will leave with practical ways to use AI on your own, without being made to feel behind or overwhelmed by the technology.",
     ],
     photo: "/founder/deej.png",
   },
+  testimonials: [
+    {
+      quote:
+        "Before the coaching, I had heard so much about AI but honestly had no idea where to start. ChatGPT felt intimidating and I was worried I would press the wrong thing or ask a silly question. After just one session, I understood how to speak to it properly and how to get useful answers. I now use AI to write emails, plan meals, research holidays and even help me understand documents I would normally ask my children about. I feel far more confident and independent with technology.",
+      firstName: "Linda",
+      detail: "62",
+    },
+    {
+      quote:
+        "My biggest problem was that technology seemed to be moving faster than I could keep up with it. My children kept telling me to use ChatGPT, but whenever I tried it I did not know what to ask. The coaching showed me step by step how to use AI for things that are actually relevant to my life. I now use it to research products, plan trips, explain complicated information and help me write messages. I finally understand what everyone has been talking about.",
+      firstName: "Susan",
+      detail: "67",
+    },
+    {
+      quote:
+        "I was very sceptical about AI and thought it was mostly a gimmick for younger people. What surprised me was how useful it can be when you know how to use it properly. I was shown how to ask better questions, check the information it gives me and avoid sharing private information. I now use it almost every day for research, DIY projects, comparing products and getting quick explanations when I do not understand something.",
+      firstName: "Johan",
+      detail: "71",
+    },
+  ],
   faq: {
     eyebrow: "Questions worth asking",
     headline: "Before you book.",
@@ -118,12 +144,12 @@ export const fluentCopy = {
       {
         question: "Is the first coaching session free?",
         answer:
-          "The 15-minute introduction is free. Your first 60-minute coaching session is paid. You can choose one session or a package above.",
+          "The 15-minute introduction is free. Your first 60-minute coaching session costs R2,000. If you book a package within 48 hours after that session, the R2,000 becomes the first session in the package. You pay only the balance: R1,600 for two sessions in total, or R2,500 for three sessions in total. It does not add a session. After 48 hours there is no credit.",
       },
       {
         question: "What if I have already used AI?",
         answer:
-          "That is useful. The short assessment shows me what you already know, so we can skip the basics and work on the places where better questions, refinement or checking will help.",
+          "That is useful. The short assessment shows me what you already know, so we can start at the right place and work on better questions, clearer answers and careful checking.",
       },
       {
         question: "What could we work on?",
@@ -140,11 +166,6 @@ export const fluentCopy = {
         answer:
           "You leave with the examples we built together and a repeatable way to use them. The next session starts with your real attempts, so anything that did not stick gets fixed in context.",
       },
-      {
-        question: "Can you do this for my whole team?",
-        answer:
-          "Yes. Team sessions need a shared use case and a little preparation, so start with the assessment and choose ‘My team’ or ‘Both’. We will scope it on the intro call.",
-      },
     ],
   },
   finalCta: {
@@ -154,7 +175,10 @@ export const fluentCopy = {
     note: "Your result appears straight away.",
   },
   footer: {
-    legal: "© 2026 Fluent. A Deej Burke coaching practice.",
+    legal: "© 2026 AI, made clear. A Deej Burke coaching practice.",
     location: "Cape Town, South Africa",
+    email: "deej@deejburke.co.za",
+    privacy:
+      "We store your details only to arrange and run your coaching. We do not sell or share them.",
   },
 } as const;

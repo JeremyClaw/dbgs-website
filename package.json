@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:gate-ai": "node --no-warnings --experimental-strip-types --test components/survey/gate-ai.test.mjs",
+    "test:gate-dbgs": "node --no-warnings --experimental-strip-types --test components/survey/gate.test.mjs",
+    "test:flow-ai": "node --test components/survey/fluent-flow.test.mjs",
     "test:fluent-booking": "node --no-warnings --experimental-strip-types --test lib/fluent-booking.test.mjs"
   },
   "dependencies": {

@@ -9,7 +9,12 @@ export async function GET(request: Request) {
     const format = url.searchParams.get("format");
     const allowedDuration = [15, 30, 60, 90].includes(duration) ? duration : 30;
     const bufferMinutes = isFluentDeliveryFormat(format) ? getFluentBufferMinutes(format) : 15;
-    const slots = await getAvailableSlots(undefined, allowedDuration, bufferMinutes);
+    const slots = await getAvailableSlots(
+      undefined,
+      allowedDuration,
+      bufferMinutes,
+      isFluentDeliveryFormat(format) ? "coaching" : "default"
+    );
     return NextResponse.json({ slots });
   } catch (err) {
     console.error("[availability] failed to load calendar free/busy", err);

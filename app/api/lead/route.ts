@@ -2,48 +2,28 @@ import { NextResponse } from "next/server";
 import { evaluate } from "@/components/survey/gate";
 import { evaluate as evaluateFluent } from "@/components/survey/gate-ai";
 import { getAnswerLabel, getQuestionLabel } from "@/components/survey/questions";
-import {
-  getFluentAnswerLabel,
-  getFluentQuestionLabel,
-  type FluentAnswer,
-} from "@/components/survey/questions-ai";
 import { sendNotification } from "@/lib/google/gmail";
 
 async function handleFluentLead(body: Record<string, unknown>) {
   const answers = body.answers as Record<string, string | string[]> | undefined;
-  const contact = body.contact as
-    | { name?: string; email?: string; mobile?: string }
-    | undefined;
+  const email = typeof body.email === "string" ? body.email.trim() : "";
 
-  if (!answers || !contact?.email || !contact.name || !contact.mobile) {
-    return NextResponse.json({ error: "Missing answers or contact details" }, { status: 400 });
+  if (body.mode !== "summary" || !answers || !email) {
+    return NextResponse.json({ error: "Missing assessment or email address" }, { status: 400 });
   }
 
   const result = evaluateFluent(answers);
-  const answerLines = Object.entries(answers)
-    .map(
-      ([key, value]) =>
-        `- ${getFluentQuestionLabel(key)}: ${getFluentAnswerLabel(key, value as FluentAnswer)}`
-    )
-    .join("\n");
-  const summary = `New Fluent assessment submission\n\nRecommendation: ${result.recommendedTier} session${result.recommendedTier === 1 ? "" : "s"}\nSession length: ${result.sessionMinutes} minutes\nLead summary: ${result.leadSummary}\n\nName: ${contact.name}\nEmail: ${contact.email}\nMobile: ${contact.mobile}\n\nAnswers:\n${answerLines}`;
-
-  console.log("[lead:fluent]", {
-    name: contact.name,
-    email: contact.email,
-    recommendedTier: result.recommendedTier,
-    sessionMinutes: result.sessionMinutes,
-  });
+  const recommendation = `${result.recommendedTier} session${result.recommendedTier === 1 ? "" : "s"}, R${result.recommendedTier === 1 ? "2,000" : result.recommendedTier === 2 ? "3,600" : "4,500"}`;
 
   try {
-    const notification = {
-      subject: `Fluent assessment: ${contact.name}`,
-      body: summary,
-    };
-    await sendNotification({ to: process.env.OPS_EMAIL as string, ...notification });
-    await sendNotification({ to: process.env.DEEJ_EMAIL as string, ...notification });
+    await sendNotification({
+      to: email,
+      subject: "Your AI, made clear recommendation",
+      body: `Your recommendation\n\n${result.headline}\n${result.rationale}\n\nRecommended: ${recommendation}\nEvery paid session lasts 60 minutes.\n\n${result.recommendedTier === 1 ? "If you book a package within 48 hours of your first session, the R2,000 already paid becomes its first session. You pay only the balance." : ""}\n\nIf your first session is not useful, you do not pay for any further sessions.\n\nDeej Burke\nAI, made clear`,
+    });
   } catch (err) {
-    console.error("[lead:fluent] notification email failed", err);
+    console.error("[lead:fluent] summary email failed", err);
+    return NextResponse.json({ error: "Summary email failed" }, { status: 500 });
   }
 
   return NextResponse.json({

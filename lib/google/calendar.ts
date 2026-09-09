@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import { getOAuth2Client } from "./auth";
-import { overlapsWithBuffer } from "../fluent-booking";
+import { getFluentSlotMinutesForDay, overlapsWithBuffer } from "../fluent-booking";
 
 // Slot rules, editable without touching any UI code.
 const TIMEZONE = "Africa/Johannesburg"; // SAST, fixed UTC+2, no DST
@@ -67,7 +67,8 @@ function normaliseBuffer(bufferMinutes: number) {
 function generateCandidateSlots(
   daysAhead: number,
   durationMinutes: number,
-  bufferMinutes: number
+  bufferMinutes: number,
+  schedule: "default" | "coaching"
 ): Slot[] {
   const now = nowInSAST();
   const slots: Slot[] = [];
@@ -76,9 +77,17 @@ function generateCandidateSlots(
 
   for (let offset = 0; offset <= daysAhead; offset++) {
     const { year, month, day } = addDays(now.year, now.month, now.day, offset);
-    if (!isWeekday(year, month, day)) continue;
+    const dayOfWeek = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+    const startMinutes = schedule === "coaching"
+      ? getFluentSlotMinutesForDay(dayOfWeek)
+      : isWeekday(year, month, day)
+        ? Array.from(
+            { length: Math.floor(((WORK_END_HOUR - WORK_START_HOUR) * 60 - duration) / step) + 1 },
+            (_, index) => WORK_START_HOUR * 60 + index * step
+          )
+        : [];
 
-    for (let minutes = WORK_START_HOUR * 60; minutes + duration <= WORK_END_HOUR * 60; minutes += step) {
+    for (const minutes of startMinutes) {
       const hour = Math.floor(minutes / 60);
       const minute = minutes % 60;
       const start = new Date(sastDateTime(year, month, day, hour, minute));
@@ -122,11 +131,12 @@ async function getBusyBlocks(timeMin: Date, timeMax: Date) {
 export async function getAvailableSlots(
   daysAhead: number = DEFAULT_DAYS_AHEAD,
   durationMinutes: number = DEFAULT_SLOT_DURATION_MINUTES,
-  bufferMinutes: number = BUFFER_MINUTES
+  bufferMinutes: number = BUFFER_MINUTES,
+  schedule: "default" | "coaching" = "default"
 ) {
   const duration = normaliseDuration(durationMinutes);
   const buffer = normaliseBuffer(bufferMinutes);
-  const candidates = generateCandidateSlots(daysAhead, duration, buffer);
+  const candidates = generateCandidateSlots(daysAhead, duration, buffer, schedule);
   if (candidates.length === 0) return [];
 
   const timeMin = new Date(candidates[0].start.getTime() - buffer * 60 * 1000);

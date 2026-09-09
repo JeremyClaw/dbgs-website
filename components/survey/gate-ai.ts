@@ -42,22 +42,33 @@ function leadSummary(answers: FluentAnswers, score: number, band: Band) {
     `First use case: ${stringAnswer(answers, "useCase") || "not given"}`,
     `Main blocker: ${stringAnswer(answers, "blocker") || "not given"}`,
     `Hourly value: ${stringAnswer(answers, "hourlyValue") || "not given"}`,
-    `For: ${stringAnswer(answers, "who") || "not given"}`,
+    `Use: ${stringAnswer(answers, "context") || "not given"}`,
   ].join("; ");
 }
 
 export function evaluate(answers: FluentAnswers): FluentResult {
   const score = mechanicalScore(answers);
   const paying = stringAnswer(answers, "paying");
+  const tried = answers.tried;
+  const hasUsedNoTools = Array.isArray(tried) ? tried.includes("none") : tried === "none";
+  const blocker = stringAnswer(answers, "blocker");
+  const hourlyValue = stringAnswer(answers, "hourlyValue");
+  const shouldStartWithOne =
+    hasUsedNoTools ||
+    paying !== "yes" ||
+    blocker === "too_technical" ||
+    hourlyValue === "under_500" ||
+    hourlyValue === "500_1500" ||
+    score <= 2;
 
-  if (score <= 2) {
+  if (shouldStartWithOne) {
     const band = "foundations";
     return {
       band,
       recommendedTier: 1,
       sessionMinutes: 60,
       headline: "Let us start with one session and see how it goes.",
-      rationale: "Sixty minutes, no package, no commitment. If it clicks we carry on from there.",
+      rationale: "One session, R2,000, no commitment. Start with one useful result, then decide.",
       leadSummary: leadSummary(answers, score, band),
     };
   }

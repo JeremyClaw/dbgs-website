@@ -148,6 +148,28 @@ export default function FluentPage() {
           </div>
         </section>
 
+        {copy.testimonials.length > 0 && (
+          <section className="fluent-testimonials" aria-labelledby="testimonial-heading">
+            <div className="fluent-shell">
+              <div className="fluent-testimonial-heading">
+                <h2 className="fluent-section-title" id="testimonial-heading">What clients say</h2>
+                <p>Swipe or scroll to read more</p>
+              </div>
+              <div className="fluent-testimonial-grid">
+                {copy.testimonials.map((testimonial) => (
+                  <figure key={`${testimonial.firstName}-${testimonial.detail}`}>
+                    <div className="fluent-testimonial-stars" aria-label="5 out of 5 stars">
+                      <span aria-hidden="true">★★★★★</span>
+                    </div>
+                    <blockquote>{testimonial.quote}</blockquote>
+                    <figcaption>{testimonial.firstName}, {testimonial.detail}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         <section className="fluent-pricing" id="pricing">
           <div className="fluent-shell">
             <h2 className="fluent-section-title">Choose your coaching package.</h2>
@@ -166,6 +188,8 @@ export default function FluentPage() {
               ))}
             </div>
             <p className="fluent-pricing-footnote">{copy.pricing.upgrade}</p>
+            <p className="fluent-pricing-risk">{copy.pricing.riskReversal}</p>
+            <p className="fluent-pricing-payment"><strong>How payment works:</strong> {copy.pricing.payment}</p>
             <a className="fluent-button fluent-pricing-button" href="#assessment">
               {bookingLabel}
             </a>
@@ -202,8 +226,15 @@ export default function FluentPage() {
       <footer className="fluent-footer">
         <div className="fluent-shell fluent-footer-inner">
           <strong>AI, made clear</strong>
-          <span>{copy.footer.legal}</span>
-          <span>{copy.footer.location}</span>
+          <div>
+            <span>{copy.footer.legal}</span>
+            <span>{copy.footer.location}</span>
+          </div>
+          <div>
+            <a href={`mailto:${copy.footer.email}`}>{copy.footer.email}</a>
+            <a href="/AI-coaching-by-deej/privacy">Privacy</a>
+          </div>
+          <p>{copy.footer.privacy}</p>
         </div>
       </footer>
 

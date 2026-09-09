@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { evaluate } from "@/components/survey/gate";
 import { evaluate as evaluateFluent } from "@/components/survey/gate-ai";
-import type { FluentAnswers } from "@/components/survey/questions-ai";
+import {
+  getFluentAnswerLabel,
+  getFluentQuestionLabel,
+  type FluentAnswer,
+  type FluentAnswers,
+} from "@/components/survey/questions-ai";
 import { createBookingEvent } from "@/lib/google/calendar";
 import { sendNotification } from "@/lib/google/gmail";
 import {
@@ -44,7 +49,10 @@ async function handleFluentBooking(body: Record<string, unknown>) {
   const result = evaluateFluent(answers);
   const formatLabel = getFluentFormatLabel(format);
   const bufferMinutes = getFluentBufferMinutes(format);
-  const eventDescription = `Fluent intro call.\n\nName: ${name}\nEmail: ${email}\nMobile: ${mobile}\nFormat: ${formatLabel}${address ? `\nAddress: ${address}` : ""}\nRecommended package: ${result.recommendedTier} session${result.recommendedTier === 1 ? "" : "s"}\nCoaching session length: ${result.sessionMinutes} minutes\n\n${result.leadSummary}`;
+  const answerLines = Object.entries(answers)
+    .map(([key, value]) => `- ${getFluentQuestionLabel(key)}: ${getFluentAnswerLabel(key, value as FluentAnswer)}`)
+    .join("\n");
+  const eventDescription = `AI, made clear intro call.\n\nName: ${name}\nEmail: ${email}\nMobile: ${mobile}\nFormat: ${formatLabel}${address ? `\nAddress: ${address}` : ""}\nRecommended package: ${result.recommendedTier} session${result.recommendedTier === 1 ? "" : "s"}\nCoaching session length: ${result.sessionMinutes} minutes`;
 
   let booking;
   try {
@@ -52,10 +60,10 @@ async function handleFluentBooking(body: Record<string, unknown>) {
       slot,
       name,
       email,
-      externalLabel: "Fluent intro call",
+      externalLabel: "AI, made clear intro call",
       durationMinutes: FLUENT_INTRO_DURATION_MINUTES,
       bufferMinutes,
-      eventTitle: `Fluent intro: ${name} (${formatLabel})`,
+      eventTitle: `AI, made clear intro: ${name} (${formatLabel})`,
       eventDescription,
       location: format === "in_person" ? address : "Remote",
     });
@@ -74,13 +82,13 @@ async function handleFluentBooking(body: Record<string, unknown>) {
   try {
     await sendNotification({
       to: email,
-      subject: "You're booked for your Fluent intro call",
-      body: `Hi ${name},\n\nYou're confirmed for ${when} (South Africa time).\n\nFormat: ${formatLabel}${address ? `\nAddress: ${address}` : ""}\n\nYour assessment recommendation: ${recommendation}.\n\nA calendar invite is on its way separately.\n\nTalk soon,\nDeej`,
+      subject: "You are booked for your AI, made clear intro call",
+      body: `Hi ${name},\n\nYou are confirmed for ${when} (South Africa time).\n\nFormat: ${formatLabel}${address ? `\nAddress: ${address}` : ""}\n\nYour AI, made clear recommendation: ${recommendation}.\n\nA calendar invite is on its way separately.\n\nTalk soon,\nDeej`,
     });
 
-    const opsBody = `Fluent booking confirmed.\n\nName: ${name}\nEmail: ${email}\nMobile: ${mobile}\nWhen: ${when}\nFormat: ${formatLabel}${address ? `\nAddress: ${address}` : ""}\nBuffer: ${bufferMinutes} minutes\nRecommendation: ${recommendation}\n\n${result.leadSummary}`;
+    const opsBody = `AI, made clear booking confirmed.\n\nName: ${name}\nEmail: ${email}\nMobile: ${mobile}\nChosen slot: ${when}\nFormat: ${formatLabel}${address ? `\nAddress: ${address}` : ""}\nBuffer: ${bufferMinutes} minutes\nRecommendation: ${recommendation}\n\nAssessment answers:\n${answerLines}`;
     const notification = {
-      subject: `Fluent booking confirmed: ${name}`,
+      subject: `AI, made clear booking confirmed: ${name}`,
       body: opsBody,
     };
     await sendNotification({ to: process.env.OPS_EMAIL as string, ...notification });

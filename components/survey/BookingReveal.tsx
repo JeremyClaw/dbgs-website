@@ -7,7 +7,11 @@ import type { FluentAnswers, FluentContactDetails } from "./questions-ai";
 import type { FluentResult, Tier } from "./gate-ai";
 import { copy } from "@/lib/copy";
 import { fluentCopy } from "@/lib/copy-fluent";
-import { FLUENT_INTRO_DURATION_MINUTES } from "@/lib/fluent-booking";
+import {
+  FLUENT_INTRO_DURATION_MINUTES,
+  canConfirmFluentBooking,
+  getDefaultFluentFormat,
+} from "@/lib/fluent-booking";
 
 const TIMEZONE = "Africa/Johannesburg";
 
@@ -20,7 +24,6 @@ type DbgsBookingProps = {
 
 type FluentBookingProps = {
   funnel: "fluent";
-  contact: FluentContactDetails;
   answers: FluentAnswers;
   result: FluentResult;
 };
@@ -168,14 +171,22 @@ const TIER_DETAILS: Record<Tier, { name: string; price: string }> = {
   3: { name: "Three sessions", price: "R4,500" },
 };
 
-function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
-  const [format, setFormat] = useState<DeliveryFormat>("in_person");
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function FluentBookingReveal({ answers, result }: FluentBookingProps) {
+  const defaultFormat = getDefaultFluentFormat(answers.context);
+  const isPersonalUse = answers.context === "personal";
+  const [format, setFormat] = useState<DeliveryFormat>(defaultFormat);
+  const [contact, setContact] = useState<FluentContactDetails>({ name: "", email: "", mobile: "" });
   const [address, setAddress] = useState("");
   const [slots, setSlots] = useState<string[] | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [booking, setBooking] = useState(false);
   const [booked, setBooked] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [summaryEmail, setSummaryEmail] = useState("");
+  const [summaryState, setSummaryState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const tier = TIER_DETAILS[result.recommendedTier];
 
   useEffect(() => {
@@ -208,6 +219,21 @@ function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
     if (format === "in_person" && address.trim() === "") return;
     setSelectedSlot(slot);
     setError(null);
+  }
+
+  async function emailSummary() {
+    if (!EMAIL_PATTERN.test(summaryEmail.trim())) return;
+    setSummaryState("sending");
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ funnel: "fluent", mode: "summary", email: summaryEmail.trim(), answers }),
+      });
+      setSummaryState(response.ok ? "sent" : "error");
+    } catch {
+      setSummaryState("error");
+    }
   }
 
   async function confirmSlot() {
@@ -264,7 +290,12 @@ function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
 
   const needsAddress = format === "in_person";
   const canChooseTime = !booking && (!needsAddress || address.trim() !== "");
-  const canConfirm = canChooseTime && selectedSlot !== null;
+  const canConfirm = canChooseTime && canConfirmFluentBooking({
+    selectedSlot,
+    format,
+    address,
+    contact,
+  });
 
   return (
     <div className="fluent-booking">
@@ -272,6 +303,29 @@ function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
         <p className="fluent-kicker">{fluentCopy.booking.resultEyebrow}</p>
         <h3 className="fluent-display">{result.headline}</h3>
         <p>{result.rationale}</p>
+        <p className="fluent-credit-note">{fluentCopy.pricing.credit}</p>
+        <p className="fluent-risk-note">{fluentCopy.pricing.riskReversal}</p>
+        <button type="button" className="fluent-summary-link" onClick={() => setSummaryOpen(true)}>
+          Email me this summary
+        </button>
+        {summaryOpen && (
+          <div className="fluent-summary-capture">
+            <label>
+              <span>Email address</span>
+              <input
+                type="email"
+                autoComplete="email"
+                value={summaryEmail}
+                onChange={(event) => setSummaryEmail(event.target.value)}
+              />
+            </label>
+            <button type="button" onClick={emailSummary} disabled={!EMAIL_PATTERN.test(summaryEmail.trim()) || summaryState === "sending"}>
+              {summaryState === "sending" ? "Sending..." : "Send summary"}
+            </button>
+            {summaryState === "sent" && <p>Your summary is on its way.</p>}
+            {summaryState === "error" && <p>That did not send. Please try again.</p>}
+          </div>
+        )}
       </div>
 
       <div className="fluent-recommendation" aria-label="Recommended coaching package">
@@ -280,18 +334,30 @@ function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
         <p>{tier.price} · {result.sessionMinutes} minutes per session</p>
       </div>
 
+      {result.recommendedTier === 1 && (
+        <div className="fluent-package-options">
+          <p>If you already know you want to keep going</p>
+          <div>
+            <span><strong>Two sessions</strong> R3,600 total</span>
+            <span><strong>Three sessions</strong> R4,500 total</span>
+          </div>
+        </div>
+      )}
+
       <fieldset className="fluent-format-choice">
         <legend>{fluentCopy.booking.formatLegend}</legend>
-        <div>
-          <button
-            type="button"
-            className={format === "in_person" ? "is-selected" : ""}
-            aria-pressed={format === "in_person"}
-            onClick={() => chooseFormat("in_person")}
-          >
-            <strong>{fluentCopy.booking.inPersonLabel}</strong>
-            <span>{fluentCopy.booking.inPersonNote}</span>
-          </button>
+        <div className={isPersonalUse ? "is-personal" : ""}>
+          {!isPersonalUse && (
+            <button
+              type="button"
+              className={format === "in_person" ? "is-selected" : ""}
+              aria-pressed={format === "in_person"}
+              onClick={() => chooseFormat("in_person")}
+            >
+              <strong>{fluentCopy.booking.inPersonLabel}</strong>
+              <span>{fluentCopy.booking.inPersonNote}</span>
+            </button>
+          )}
           <button
             type="button"
             className={format === "remote" ? "is-selected" : ""}
@@ -302,6 +368,17 @@ function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
             <span>{fluentCopy.booking.remoteNote}</span>
           </button>
         </div>
+        {isPersonalUse && format === "remote" && (
+          <p className="fluent-in-person-request">
+            In-person coaching is available in Cape Town on request.{" "}
+            <button type="button" onClick={() => chooseFormat("in_person")}>Choose in person</button>
+          </p>
+        )}
+        {isPersonalUse && format === "in_person" && (
+          <button type="button" className="fluent-format-back" onClick={() => chooseFormat("remote")}>
+            Use a remote call instead
+          </button>
+        )}
       </fieldset>
 
       {needsAddress && (
@@ -350,6 +427,23 @@ function FluentBookingReveal({ contact, answers, result }: FluentBookingProps) {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+        {selectedSlot && (
+          <div className="fluent-contact-grid">
+            <p>Who should I book this call for?</p>
+            <label>
+              <span>Name</span>
+              <input type="text" autoComplete="name" value={contact.name} onChange={(event) => setContact((current) => ({ ...current, name: event.target.value }))} />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" autoComplete="email" value={contact.email} onChange={(event) => setContact((current) => ({ ...current, email: event.target.value }))} />
+            </label>
+            <label>
+              <span>Mobile</span>
+              <input type="tel" autoComplete="tel" value={contact.mobile} onChange={(event) => setContact((current) => ({ ...current, mobile: event.target.value }))} />
+            </label>
           </div>
         )}
         {slots !== null && slots.length > 0 && (

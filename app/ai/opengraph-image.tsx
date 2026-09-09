@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-export const alt = "Fluent, one-to-one AI coaching with Deej Burke";
+export const alt = "AI, made clear, one-to-one AI coaching with Deej Burke";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -46,7 +46,7 @@ export default async function OpenGraphImage() {
           }}
         >
           <div style={{ color: "#1e3a5f", fontSize: 76, fontFamily: "Georgia", lineHeight: 1 }}>
-            Fluent
+            AI, made clear
           </div>
           <div style={{ width: 90, height: 5, margin: "30px 0", background: "#b5532a" }} />
           <div style={{ maxWidth: 560, fontSize: 37, lineHeight: 1.22 }}>

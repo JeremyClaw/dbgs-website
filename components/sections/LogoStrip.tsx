@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { copy } from "@/lib/copy";
 
 function LogoTile({ name, url, logo }: { name: string; url: string; logo: string | null }) {
@@ -9,7 +10,7 @@ function LogoTile({ name, url, logo }: { name: string; url: string; logo: string
       className="flex items-center justify-center h-20 w-36 sm:w-40 rounded-xl bg-white transition-all hover:-translate-y-1 hover:shadow-xl"
     >
       {logo ? (
-        <img src={logo} alt={name} className="max-h-10 max-w-[75%] object-contain" />
+        <Image src={logo} alt={name} width={160} height={40} className="max-h-10 max-w-[75%] object-contain" />
       ) : (
         <span className="wordmark-gloei">{name}</span>
       )}

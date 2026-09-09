@@ -20,11 +20,11 @@ const cases = [
     minutes: 60,
   },
   {
-    label: "score 3 is the lower gaps boundary",
-    answers: { copyPaste: "easy", screenshot: "not_sure", files: "usually", passwords: "written", paying: "no" },
+    label: "no paid tool starts with one session even with some computer confidence",
+    answers: { copyPaste: "easy", screenshot: "not_sure", files: "usually", passwords: "written", paying: "no", tried: ["chatgpt"], hourlyValue: "3000_plus" },
     score: 3,
-    band: "gaps",
-    tier: 3,
+    band: "foundations",
+    tier: 1,
     minutes: 60,
   },
   {
@@ -44,11 +44,11 @@ const cases = [
     minutes: 60,
   },
   {
-    label: "score 6 stays gaps when not paying",
-    answers: { copyPaste: "easy", screenshot: "yes", files: "yes", passwords: "written", paying: "no" },
+    label: "a low hourly value starts with one session",
+    answers: { copyPaste: "easy", screenshot: "yes", files: "yes", passwords: "written", paying: "yes", tried: ["chatgpt"], hourlyValue: "500_1500" },
     score: 6,
-    band: "gaps",
-    tier: 3,
+    band: "foundations",
+    tier: 1,
     minutes: 60,
   },
   {
@@ -60,22 +60,40 @@ const cases = [
     minutes: 60,
   },
   {
-    label: "score 8 stays gaps when payment is uncertain",
-    answers: { copyPaste: "easy", screenshot: "yes", files: "yes", passwords: "manager", paying: "not_sure" },
+    label: "no tools used starts with one session",
+    answers: { copyPaste: "easy", screenshot: "yes", files: "yes", passwords: "manager", paying: "yes", tried: ["none"], hourlyValue: "3000_plus" },
     score: 8,
-    band: "gaps",
-    tier: 3,
+    band: "foundations",
+    tier: 1,
     minutes: 60,
   },
   {
-    label: "score 8 becomes ready when paying",
-    answers: { copyPaste: "easy", screenshot: "yes", files: "yes", passwords: "manager", paying: "yes" },
+    label: "a confident paid user receives a two-session recommendation",
+    answers: { copyPaste: "easy", screenshot: "yes", files: "yes", passwords: "manager", paying: "yes", tried: ["chatgpt"], blocker: "no_time", hourlyValue: "3000_plus" },
     score: 8,
     band: "ready",
     tier: 2,
     minutes: 60,
   },
 ];
+
+cases.push({
+  label: "a paid user with a few gaps can receive a three-session recommendation",
+  answers: { copyPaste: "easy", screenshot: "not_sure", files: "usually", passwords: "browser", paying: "yes", tried: ["chatgpt"], blocker: "no_time", hourlyValue: "1500_3000" },
+  score: 4,
+  band: "gaps",
+  tier: 3,
+  minutes: 60,
+});
+
+cases.push({
+  label: "too technical starts with one session regardless of computer score",
+  answers: { copyPaste: "easy", screenshot: "yes", files: "yes", passwords: "manager", paying: "yes", tried: ["chatgpt"], blocker: "too_technical", hourlyValue: "3000_plus" },
+  score: 8,
+  band: "foundations",
+  tier: 1,
+  minutes: 60,
+});
 
 for (const testCase of cases) {
   test(testCase.label, () => {

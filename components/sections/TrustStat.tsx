@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Section } from "@/components/ui/Section";
 import { copy } from "@/lib/copy";
 
@@ -39,7 +40,7 @@ export function TrustStat() {
                 key={platform.name}
                 className="flex items-center gap-2 bg-white rounded-lg px-4 py-2.5"
               >
-                <img src={platform.logo} alt={platform.name} className="h-5 w-auto" />
+                <Image src={platform.logo} alt={platform.name} width={80} height={20} className="h-5 w-auto" />
                 <span className="text-sm font-semibold text-[var(--ink)]">
                   {platform.name}
                 </span>

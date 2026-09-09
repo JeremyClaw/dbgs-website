@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Section } from "@/components/ui/Section";
 import { copy } from "@/lib/copy";
 
@@ -12,7 +13,7 @@ function BrandTile({
 }) {
   return (
     <div className="flex items-center justify-center h-28 sm:h-32 w-full rounded-2xl bg-white px-3 overflow-hidden">
-      {logo && <img src={logo} alt={name} className="max-h-10 sm:max-h-12 max-w-full object-contain" />}
+      {logo && <Image src={logo} alt={name} width={180} height={48} className="max-h-10 sm:max-h-12 max-w-full object-contain" />}
       {style === "text-bold" && (
         <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--ink)] whitespace-nowrap">
           {name}
